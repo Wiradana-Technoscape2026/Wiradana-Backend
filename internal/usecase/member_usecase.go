@@ -15,9 +15,9 @@ import (
 )
 
 var (
-	ErrMemberNotFound    = errors.New("anggota tidak ditemukan")
-	ErrDuplicateNIK      = errors.New("nik sudah terdaftar di koperasi ini")
-	ErrAccountExists     = errors.New("akun login untuk NIK ini sudah ada")
+	ErrMemberNotFound = errors.New("anggota tidak ditemukan")
+	ErrDuplicateNIK   = errors.New("nik sudah terdaftar di koperasi ini")
+	ErrAccountExists  = errors.New("akun login untuk NIK ini sudah ada")
 )
 
 type MemberUsecase interface {
@@ -60,13 +60,8 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 	if req.Address != "" {
 		member.Address = &req.Address
 	}
-<<<<<<< feat/moduleplug1
-	if req.PhoneNumber != nil && *req.PhoneNumber != "" {
-		member.PhoneNumber = req.PhoneNumber
-=======
 	if req.PhoneNumber != "" {
 		member.PhoneNumber = &req.PhoneNumber
->>>>>>> main
 	}
 	if bd := repository.ParseBirthDate(req.BirthDate); bd != nil {
 		member.BirthDate = bd
