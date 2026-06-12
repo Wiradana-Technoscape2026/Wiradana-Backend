@@ -37,7 +37,13 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	notifRepo := repository.NewNotificationRepository(db)
 
 	// ── Gateways ──────────────────────────────────────────────────────────────
-	ocrGateway := adins.NewAPICoIDGateway(cfg.OCR.APIKey, cfg.OCR.BaseURL)
+	var ocrGateway adins.KTPOCRGateway
+	if cfg.OCR.APIKey == "" {
+		log.Warn("OCR_API_KEY tidak dikonfigurasi — menggunakan mock LITEDMS (MOCK_LITEDMS)")
+		ocrGateway = &adins.MockKTPOCRGateway{}
+	} else {
+		ocrGateway = adins.NewAPICoIDGateway(cfg.OCR.APIKey, cfg.OCR.BaseURL)
+	}
 	scoringGateway := adins.NewMockScoringGateway()
 
 	var notifGateway gwnot.Gateway
