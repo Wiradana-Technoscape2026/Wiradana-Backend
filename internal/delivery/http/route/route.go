@@ -70,6 +70,8 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	pengurus.Put("/members/:id", memberCtrl.Update)
 	pengurus.Get("/members/:id/savings", savingsCtrl.List)
 	pengurus.Post("/members/:id/savings", savingsCtrl.Record)
+	pengurus.Get("/savings/summary", savingsCtrl.Summary)
+	pengurus.Get("/savings/transactions", savingsCtrl.ListAll)
 
 	pengurus.Get("/loan-config", loanConfigCtrl.Get)
 	pengurus.Put("/loan-config", loanConfigCtrl.Update)

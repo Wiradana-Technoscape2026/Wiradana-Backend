@@ -62,3 +62,30 @@ func (ctrl *SavingsController) Record(c *fiber.Ctx) error {
 
 	return OK(c, tx)
 }
+
+func (ctrl *SavingsController) Summary(c *fiber.Ctx) error {
+	coopID := c.Locals("cooperative_id").(string)
+	resp, err := ctrl.savingsUC.GetCoopSummary(c.Context(), coopID)
+	if err != nil {
+		return Fail(c, fiber.StatusInternalServerError, "INTERNAL", "terjadi kesalahan server")
+	}
+	return OK(c, resp)
+}
+
+func (ctrl *SavingsController) ListAll(c *fiber.Ctx) error {
+	coopID := c.Locals("cooperative_id").(string)
+	savingsType := c.Query("type")
+	direction := c.Query("direction")
+	limit := c.QueryInt("limit", 20)
+	page := c.QueryInt("page", 1)
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * limit
+
+	txs, total, err := ctrl.savingsUC.FindAllRecent(c.Context(), coopID, savingsType, direction, limit, offset)
+	if err != nil {
+		return Fail(c, fiber.StatusInternalServerError, "INTERNAL", "terjadi kesalahan server")
+	}
+	return OKList(c, txs, total)
+}
