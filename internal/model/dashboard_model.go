@@ -1,5 +1,6 @@
 package model
 
+<<<<<<< HEAD
 // DashboardResponse — api_planning §3.8
 type DashboardResponse struct {
 	TotalMembers  int64            `json:"total_members"`
@@ -17,4 +18,18 @@ type Notification struct {
 	PeriodNo   int    `json:"period_no"`
 	TotalDue   int64  `json:"total_due"`
 	LoanID     string `json:"loan_id"`
+=======
+type DashboardNotification struct {
+	Type       string `json:"type"`
+	MemberName string `json:"member_name"`
+	DueDate    string `json:"due_date"`
+}
+
+type DashboardResponse struct {
+	TotalMembers  int64                   `json:"total_members"`
+	TotalSavings  int64                   `json:"total_savings"`
+	ActiveLoans   int64                   `json:"active_loans"`
+	OverdueLoans  int64                   `json:"overdue_loans"`
+	Notifications []DashboardNotification `json:"notifications"`
+>>>>>>> e6c7f422c936b4876b95b9366e0dc7eebfff82ed
 }
