@@ -14,6 +14,7 @@ type Member struct {
 	NIK              string         `gorm:"column:nik;not null" json:"nik"`
 	FullName         string         `gorm:"not null" json:"full_name"`
 	Address          *string        `json:"address"`
+	PhoneNumber      *string        `json:"phone_number"`
 	BirthDate        *time.Time     `gorm:"type:date" json:"birth_date"`
 	Status           string         `gorm:"not null;default:aktif" json:"status"`
 	CustomAttributes datatypes.JSON `gorm:"type:jsonb;not null;default:'{}'" json:"custom_attributes"`
