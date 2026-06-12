@@ -17,14 +17,18 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
+func failMiddleware(c *fiber.Ctx, status int, code, message string) error {
+	return c.Status(status).JSON(fiber.Map{
+		"success": false,
+		"error":   fiber.Map{"code": code, "message": message},
+	})
+}
+
 func Auth(secret string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-				"success": false,
-				"error":   "missing or invalid authorization header",
-			})
+			return failMiddleware(c, fiber.StatusUnauthorized, "UNAUTHORIZED", "token tidak ditemukan")
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
@@ -37,10 +41,7 @@ func Auth(secret string) fiber.Handler {
 		})
 
 		if err != nil || !token.Valid {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-				"success": false,
-				"error":   "invalid or expired token",
-			})
+			return failMiddleware(c, fiber.StatusUnauthorized, "UNAUTHORIZED", "token tidak valid atau sudah kedaluwarsa")
 		}
 
 		c.Locals("user_id", claims.UserID)
@@ -60,10 +61,7 @@ func RequireRole(roles ...string) fiber.Handler {
 				return c.Next()
 			}
 		}
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"success": false,
-			"error":   "insufficient permissions",
-		})
+		return failMiddleware(c, fiber.StatusForbidden, "FORBIDDEN", "akses ditolak")
 	}
 }
 
@@ -73,10 +71,7 @@ func RequireModule(db *gorm.DB, key string) fiber.Handler {
 		var mod entity.CoopModule
 		err := db.Where("cooperative_id = ? AND module_key = ? AND enabled = true", coopID, key).First(&mod).Error
 		if err != nil {
-			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-				"success": false,
-				"error":   "module not enabled",
-			})
+			return failMiddleware(c, fiber.StatusForbidden, "FORBIDDEN", "modul tidak aktif")
 		}
 		return c.Next()
 	}

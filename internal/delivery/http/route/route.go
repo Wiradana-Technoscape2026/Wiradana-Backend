@@ -5,7 +5,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"github.com/wiradana/backend/internal/config"
+	"github.com/wiradana/backend/internal/delivery/http/controller"
 	"github.com/wiradana/backend/internal/delivery/http/middleware"
+	"github.com/wiradana/backend/internal/repository"
+	"github.com/wiradana/backend/internal/usecase"
 	"gorm.io/gorm"
 )
 
@@ -14,27 +17,31 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 		return c.JSON(fiber.Map{"success": true, "data": "ok"})
 	})
 
-	// Public
-	auth := app.Group("/auth")
-	_ = auth // POST /auth/login registered here later
+	// Wire auth dependencies
+	userRepo := repository.NewUserRepository(db)
+	authUC := usecase.NewAuthUsecase(userRepo, cfg.JWT.Secret, cfg.JWT.ExpirationHours)
+	authCtrl := controller.NewAuthController(authUC, validate)
 
-	// Authenticated
-	api := app.Group("/", middleware.Auth(cfg.JWT.Secret))
+	api := app.Group("/api/v1")
+
+	// Public
+	api.Post("/auth/login", authCtrl.Login)
 
 	// Pengurus endpoints
-	pengurus := api.Group("/", middleware.RequireRole("pengurus"))
+	pengurus := api.Group("/", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("pengurus"))
 	_ = pengurus
 
 	// Anggota portal endpoints
-	portal := api.Group("/portal", middleware.RequireRole("anggota"))
+	portal := api.Group("/portal", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("anggota"))
 	_ = portal
 
 	// Integration (demo) endpoints
-	integrations := api.Group("/integrations", middleware.RequireRole("pengurus"))
+	integrations := api.Group("/integrations", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("pengurus"))
 	_ = integrations
 
 	// Inventory (Tier 3) — guarded by module
 	inventory := api.Group("/inventory",
+		middleware.Auth(cfg.JWT.Secret),
 		middleware.RequireRole("pengurus"),
 		middleware.RequireModule(db, "inventory"),
 	)
