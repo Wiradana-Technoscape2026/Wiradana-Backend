@@ -6,6 +6,12 @@ type Config struct {
 	App      AppConfig      `mapstructure:"app"`
 	Database DatabaseConfig `mapstructure:"database"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
+	OCR      OCRConfig      `mapstructure:"ocr"`
+}
+
+type OCRConfig struct {
+	APIKey  string `mapstructure:"api_key"`
+	BaseURL string `mapstructure:"base_url"`
 }
 
 type AppConfig struct {

@@ -10,5 +10,9 @@
   "jwt": {
     "secret": "your-random-secret-minimum-32-characters",
     "expiration_hours": 24
+  },
+  "ocr": {
+    "api_key": "YOUR_API_CO_ID_KEY",
+    "base_url": "https://use.api.co.id"
   }
 }

@@ -10,6 +10,7 @@ import (
 
 type UserRepository interface {
 	FindByEmail(ctx context.Context, email string) (*entity.AppUser, error)
+	Create(ctx context.Context, user *entity.AppUser) error
 }
 
 type userRepository struct {
@@ -30,4 +31,8 @@ func (r *userRepository) FindByEmail(ctx context.Context, email string) (*entity
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *userRepository) Create(ctx context.Context, user *entity.AppUser) error {
+	return r.db.WithContext(ctx).Create(user).Error
 }
