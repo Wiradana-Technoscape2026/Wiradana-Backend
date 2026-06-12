@@ -19,12 +19,12 @@ type SyncUsecase interface {
 }
 
 type syncUsecase struct {
-	syncRepo     repository.SyncRepository
-	memberUC     MemberUsecase
-	savingsUC    SavingsUsecase
-	loanAppUC    LoanApplicationUsecase
+	syncRepo      repository.SyncRepository
+	memberUC      MemberUsecase
+	savingsUC     SavingsUsecase
+	loanAppUC     LoanApplicationUsecase
 	installmentUC InstallmentUsecase
-	loanConfigUC LoanConfigUsecase
+	loanConfigUC  LoanConfigUsecase
 }
 
 func NewSyncUsecase(
