@@ -80,6 +80,17 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC)
 	notifCtrl := controller.NewNotificationController(notifUC)
 
+	// ── Middleware shorthands ─────────────────────────────────────────────────
+	// In Fiber v2, handlers passed to Group() are registered via app.Use(prefix),
+	// meaning a Group("", m1, m2) on /api/v1 applies m1+m2 to ALL /api/v1/* routes
+	// including /portal/*. Fix: apply middleware per-route, not per-group.
+	authM := middleware.Auth(cfg.JWT.Secret)
+	asP := middleware.RequireRole("pengurus") // assert pengurus
+	asA := middleware.RequireRole("anggota")  // assert anggota
+
+	p := func(h fiber.Handler) []fiber.Handler { return []fiber.Handler{authM, asP, h} }
+	a := func(h fiber.Handler) []fiber.Handler { return []fiber.Handler{authM, asA, h} }
+
 	api := app.Group("/api/v1")
 
 	// ── Public ────────────────────────────────────────────────────────────────
@@ -87,76 +98,76 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	api.Post("/auth/register/pengurus", authCtrl.RegisterPengurus)
 
 	// ── Pengurus ──────────────────────────────────────────────────────────────
-	pengurus := api.Group("", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("pengurus"))
-	pengurus.Post("/members", memberCtrl.Create)
-	pengurus.Get("/members", memberCtrl.List)
-	pengurus.Get("/members/:id", memberCtrl.GetByID)
-	pengurus.Put("/members/:id", memberCtrl.Update)
-	pengurus.Get("/members/:id/savings", savingsCtrl.List)
-	pengurus.Post("/members/:id/savings", savingsCtrl.Record)
-	pengurus.Get("/savings/summary", savingsCtrl.Summary)
-	pengurus.Get("/savings/transactions", savingsCtrl.ListAll)
+	// Groups used only for URL prefix — no middleware in Group() to avoid global Use leak.
+	pengurus := api.Group("")
+	pengurus.Post("/members", p(memberCtrl.Create)...)
+	pengurus.Get("/members", p(memberCtrl.List)...)
+	pengurus.Get("/members/:id", p(memberCtrl.GetByID)...)
+	pengurus.Put("/members/:id", p(memberCtrl.Update)...)
+	pengurus.Get("/members/:id/savings", p(savingsCtrl.List)...)
+	pengurus.Post("/members/:id/savings", p(savingsCtrl.Record)...)
+	pengurus.Get("/savings/summary", p(savingsCtrl.Summary)...)
+	pengurus.Get("/savings/transactions", p(savingsCtrl.ListAll)...)
 
-	pengurus.Get("/loan-config", loanConfigCtrl.Get)
-	pengurus.Put("/loan-config", loanConfigCtrl.Update)
+	pengurus.Get("/loan-config", p(loanConfigCtrl.Get)...)
+	pengurus.Put("/loan-config", p(loanConfigCtrl.Update)...)
 
-	pengurus.Get("/loan-applications", loanAppCtrl.List)
-	pengurus.Post("/loan-applications", loanAppCtrl.Create)
-	pengurus.Post("/loan-applications/:id/approve", loanAppCtrl.Approve)
-	pengurus.Post("/loan-applications/:id/reject", loanAppCtrl.Reject)
+	pengurus.Get("/loan-applications", p(loanAppCtrl.List)...)
+	pengurus.Post("/loan-applications", p(loanAppCtrl.Create)...)
+	pengurus.Post("/loan-applications/:id/approve", p(loanAppCtrl.Approve)...)
+	pengurus.Post("/loan-applications/:id/reject", p(loanAppCtrl.Reject)...)
 
-	pengurus.Get("/loans", loanCtrl.List)
-	pengurus.Get("/loans/:id", loanCtrl.GetByID)
+	pengurus.Get("/loans", p(loanCtrl.List)...)
+	pengurus.Get("/loans/:id", p(loanCtrl.GetByID)...)
 
-	pengurus.Post("/installments/:id/pay", installmentCtrl.Pay)
+	pengurus.Post("/installments/:id/pay", p(installmentCtrl.Pay)...)
 
-	pengurus.Get("/dashboard", dashboardCtrl.Get)
+	pengurus.Get("/dashboard", p(dashboardCtrl.Get)...)
 
-	pengurus.Get("/shu-periods", shuCtrl.List)
-	pengurus.Post("/shu-periods", shuCtrl.Create)
-	pengurus.Post("/shu-periods/:id/calculate", shuCtrl.Calculate)
+	pengurus.Get("/shu-periods", p(shuCtrl.List)...)
+	pengurus.Post("/shu-periods", p(shuCtrl.Create)...)
+	pengurus.Post("/shu-periods/:id/calculate", p(shuCtrl.Calculate)...)
 
-	pengurus.Get("/modules", moduleCtrl.List)
-	pengurus.Put("/modules/:key", moduleCtrl.Update)
+	pengurus.Get("/modules", p(moduleCtrl.List)...)
+	pengurus.Put("/modules/:key", p(moduleCtrl.Update)...)
 
-	pengurus.Get("/notifications/logs", notifCtrl.ListLogs)
-	pengurus.Post("/notifications/trigger", notifCtrl.Trigger)
+	pengurus.Get("/notifications/logs", p(notifCtrl.ListLogs)...)
+	pengurus.Post("/notifications/trigger", p(notifCtrl.Trigger)...)
 
 	// ── Portal Anggota ────────────────────────────────────────────────────────
-	portal := api.Group("/portal", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("anggota"))
-	portal.Get("/me", portalCtrl.Me)
-	portal.Get("/shu", portalCtrl.SHU)
-	portal.Get("/loan-applications", portalLoanCtrl.ListApplications)
-	portal.Post("/loan-applications", portalLoanCtrl.Apply)
-	portal.Get("/loans", portalLoanCtrl.ListLoans)
-	portal.Get("/loans/:id", portalLoanCtrl.GetLoan)
+	portal := api.Group("/portal")
+	portal.Get("/me", a(portalCtrl.Me)...)
+	portal.Get("/shu", a(portalCtrl.SHU)...)
+	portal.Get("/loan-applications", a(portalLoanCtrl.ListApplications)...)
+	portal.Post("/loan-applications", a(portalLoanCtrl.Apply)...)
+	portal.Get("/loans", a(portalLoanCtrl.ListLoans)...)
+	portal.Get("/loans/:id", a(portalLoanCtrl.GetLoan)...)
 
 	// ── Integration (demo endpoints) ──────────────────────────────────────────
-	integrations := api.Group("/integrations", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("pengurus"))
-	integrations.Post("/adins/ocr/ktp", ocrCtrl.ExtractKTP)
-	integrations.Post("/adins/credit-scoring", scoringCtrl.Score)
+	integrations := api.Group("/integrations")
+	integrations.Post("/adins/ocr/ktp", p(ocrCtrl.ExtractKTP)...)
+	integrations.Post("/adins/credit-scoring", p(scoringCtrl.Score)...)
 
 	// ── Sync (offline-first) ─────────────────────────────────────────────────
 	syncRepo := repository.NewSyncRepository(db)
 	syncUC := usecase.NewSyncUsecase(syncRepo, memberUC, savingsUC, loanAppUC, installmentUC, loanConfigUC)
 	syncCtrl := controller.NewSyncController(syncUC, validate)
-	syncGroup := api.Group("/sync", middleware.Auth(cfg.JWT.Secret))
-	syncGroup.Get("/pull", syncCtrl.Pull)
-	syncGroup.Post("/push", middleware.RequireRole("pengurus"), syncCtrl.Push)
+	syncGroup := api.Group("/sync")
+	syncGroup.Get("/pull", authM, syncCtrl.Pull)
+	syncGroup.Post("/push", p(syncCtrl.Push)...)
 
 	// ── Inventory (Tier 3) ────────────────────────────────────────────────────
-	inventory := api.Group("/inventory",
-		middleware.Auth(cfg.JWT.Secret),
-		middleware.RequireRole("pengurus"),
-		middleware.RequireModule(db, "inventory"),
-	)
-	inventory.Get("/field-defs", inventoryCtrl.ListFieldDefs)
-	inventory.Post("/field-defs", inventoryCtrl.CreateFieldDef)
-	inventory.Delete("/field-defs/:id", inventoryCtrl.DeleteFieldDef)
-	inventory.Get("/products", inventoryCtrl.ListProducts)
-	inventory.Post("/products", inventoryCtrl.CreateProduct)
-	inventory.Put("/products/:id", inventoryCtrl.UpdateProduct)
-	inventory.Post("/products/:id/movements", inventoryCtrl.RecordMovement)
+	invM := middleware.RequireModule(db, "inventory")
+	inv := func(h fiber.Handler) []fiber.Handler { return []fiber.Handler{authM, asP, invM, h} }
+
+	inventory := api.Group("/inventory")
+	inventory.Get("/field-defs", inv(inventoryCtrl.ListFieldDefs)...)
+	inventory.Post("/field-defs", inv(inventoryCtrl.CreateFieldDef)...)
+	inventory.Delete("/field-defs/:id", inv(inventoryCtrl.DeleteFieldDef)...)
+	inventory.Get("/products", inv(inventoryCtrl.ListProducts)...)
+	inventory.Post("/products", inv(inventoryCtrl.CreateProduct)...)
+	inventory.Put("/products/:id", inv(inventoryCtrl.UpdateProduct)...)
+	inventory.Post("/products/:id/movements", inv(inventoryCtrl.RecordMovement)...)
 
 	scheduler.StartNotificationScheduler(context.Background(), notifUC, log)
 
