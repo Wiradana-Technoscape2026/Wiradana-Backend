@@ -57,7 +57,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	api.Post("/auth/register/pengurus", authCtrl.RegisterPengurus)
 
 	// ── Pengurus ──────────────────────────────────────────────────────────────
-	pengurus := api.Group("/", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("pengurus"))
+	pengurus := api.Group("", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("pengurus"))
 	pengurus.Post("/members", memberCtrl.Create)
 	pengurus.Get("/members", memberCtrl.List)
 	pengurus.Get("/members/:id", memberCtrl.GetByID)
