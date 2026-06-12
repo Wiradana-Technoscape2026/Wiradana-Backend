@@ -26,6 +26,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	loanAppRepo := repository.NewLoanApplicationRepository(db)
 	loanRepo := repository.NewLoanRepository(db)
 	installmentRepo := repository.NewInstallmentRepository(db)
+	dashboardRepo := repository.NewDashboardRepository(db)
 
 	// ── Gateways ──────────────────────────────────────────────────────────────
 	ocrGateway := adins.NewAPICoIDGateway(cfg.OCR.APIKey, cfg.OCR.BaseURL)
@@ -40,6 +41,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	loanAppUC := usecase.NewLoanApplicationUsecase(loanAppRepo, loanConfigRepo, memberRepo, loanRepo, scoringGateway)
 	loanUC := usecase.NewLoanUsecase(loanRepo)
 	installmentUC := usecase.NewInstallmentUsecase(installmentRepo, loanRepo)
+	dashboardUC := usecase.NewDashboardUsecase(dashboardRepo)
 
 	// ── Controllers ───────────────────────────────────────────────────────────
 	authCtrl := controller.NewAuthController(authUC, validate)
@@ -52,6 +54,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	installmentCtrl := controller.NewInstallmentController(installmentUC, validate)
 	scoringCtrl := controller.NewScoringController(scoringGateway)
 	portalLoanCtrl := controller.NewPortalLoanController(loanAppUC, loanUC, validate)
+	dashboardCtrl := controller.NewDashboardController(dashboardUC)
 
 	api := app.Group("/api/v1")
 
@@ -80,6 +83,8 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	pengurus.Get("/loans/:id", loanCtrl.GetByID)
 
 	pengurus.Post("/installments/:id/pay", installmentCtrl.Pay)
+
+	pengurus.Get("/dashboard", dashboardCtrl.Get)
 
 	// ── Portal Anggota ────────────────────────────────────────────────────────
 	portal := api.Group("/portal", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("anggota"))
