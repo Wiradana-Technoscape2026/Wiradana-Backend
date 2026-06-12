@@ -60,8 +60,13 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 	if req.Address != "" {
 		member.Address = &req.Address
 	}
+<<<<<<< feat/moduleplug1
+	if req.PhoneNumber != nil && *req.PhoneNumber != "" {
+		member.PhoneNumber = req.PhoneNumber
+=======
 	if req.PhoneNumber != "" {
 		member.PhoneNumber = &req.PhoneNumber
+>>>>>>> main
 	}
 	if bd := repository.ParseBirthDate(req.BirthDate); bd != nil {
 		member.BirthDate = bd
