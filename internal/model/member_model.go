@@ -10,6 +10,7 @@ type CreateMemberRequest struct {
 	NIK              string         `json:"nik" validate:"required,len=16,numeric"`
 	FullName         string         `json:"full_name" validate:"required"`
 	Address          string         `json:"address"`
+	PhoneNumber      *string        `json:"phone_number"`
 	BirthDate        string         `json:"birth_date"` // "YYYY-MM-DD", opsional
 	CustomAttributes datatypes.JSON `json:"custom_attributes"`
 	// Opsional: buat akun login anggota sekaligus. Password min 6 karakter.
@@ -20,6 +21,7 @@ type CreateMemberRequest struct {
 type UpdateMemberRequest struct {
 	FullName         *string        `json:"full_name"`
 	Address          *string        `json:"address"`
+	PhoneNumber      *string        `json:"phone_number"`
 	Status           *string        `json:"status" validate:"omitempty,oneof=aktif nonaktif keluar"`
 	CustomAttributes datatypes.JSON `json:"custom_attributes"`
 }
@@ -36,6 +38,7 @@ type MemberResponse struct {
 	NIK              string         `json:"nik"`
 	FullName         string         `json:"full_name"`
 	Address          string         `json:"address"`
+	PhoneNumber      string         `json:"phone_number"`
 	BirthDate        string         `json:"birth_date"`
 	Status           string         `json:"status"`
 	CustomAttributes datatypes.JSON `json:"custom_attributes"`
