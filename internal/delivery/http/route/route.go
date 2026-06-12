@@ -27,6 +27,9 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	loanRepo := repository.NewLoanRepository(db)
 	installmentRepo := repository.NewInstallmentRepository(db)
 	dashboardRepo := repository.NewDashboardRepository(db)
+	shuRepo := repository.NewShuRepository(db)
+	moduleRepo := repository.NewModuleRepository(db)
+	inventoryRepo := repository.NewInventoryRepository(db)
 
 	// ── Gateways ──────────────────────────────────────────────────────────────
 	ocrGateway := adins.NewAPICoIDGateway(cfg.OCR.APIKey, cfg.OCR.BaseURL)
@@ -42,6 +45,9 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	loanUC := usecase.NewLoanUsecase(loanRepo)
 	installmentUC := usecase.NewInstallmentUsecase(installmentRepo, loanRepo)
 	dashboardUC := usecase.NewDashboardUsecase(dashboardRepo)
+	shuUC := usecase.NewShuUsecase(shuRepo)
+	moduleUC := usecase.NewModuleUsecase(moduleRepo)
+	inventoryUC := usecase.NewInventoryUsecase(inventoryRepo)
 
 	// ── Controllers ───────────────────────────────────────────────────────────
 	authCtrl := controller.NewAuthController(authUC, validate)
@@ -55,6 +61,10 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	scoringCtrl := controller.NewScoringController(scoringGateway)
 	portalLoanCtrl := controller.NewPortalLoanController(loanAppUC, loanUC, validate)
 	dashboardCtrl := controller.NewDashboardController(dashboardUC)
+	shuCtrl := controller.NewShuController(shuUC, validate)
+	moduleCtrl := controller.NewModuleController(moduleUC, validate)
+	inventoryCtrl := controller.NewInventoryController(inventoryUC, validate)
+	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC)
 
 	api := app.Group("/api/v1")
 
@@ -88,8 +98,17 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 
 	pengurus.Get("/dashboard", dashboardCtrl.Get)
 
+	pengurus.Get("/shu-periods", shuCtrl.List)
+	pengurus.Post("/shu-periods", shuCtrl.Create)
+	pengurus.Post("/shu-periods/:id/calculate", shuCtrl.Calculate)
+
+	pengurus.Get("/modules", moduleCtrl.List)
+	pengurus.Put("/modules/:key", moduleCtrl.Update)
+
 	// ── Portal Anggota ────────────────────────────────────────────────────────
 	portal := api.Group("/portal", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("anggota"))
+	portal.Get("/me", portalCtrl.Me)
+	portal.Get("/shu", portalCtrl.SHU)
 	portal.Get("/loan-applications", portalLoanCtrl.ListApplications)
 	portal.Post("/loan-applications", portalLoanCtrl.Apply)
 	portal.Get("/loans", portalLoanCtrl.ListLoans)
@@ -114,7 +133,13 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 		middleware.RequireRole("pengurus"),
 		middleware.RequireModule(db, "inventory"),
 	)
-	_ = inventory
+	inventory.Get("/field-defs", inventoryCtrl.ListFieldDefs)
+	inventory.Post("/field-defs", inventoryCtrl.CreateFieldDef)
+	inventory.Delete("/field-defs/:id", inventoryCtrl.DeleteFieldDef)
+	inventory.Get("/products", inventoryCtrl.ListProducts)
+	inventory.Post("/products", inventoryCtrl.CreateProduct)
+	inventory.Put("/products/:id", inventoryCtrl.UpdateProduct)
+	inventory.Post("/products/:id/movements", inventoryCtrl.RecordMovement)
 
 	log.Info("routes registered")
 }
