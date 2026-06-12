@@ -98,6 +98,14 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	integrations.Post("/adins/ocr/ktp", ocrCtrl.ExtractKTP)
 	integrations.Post("/adins/credit-scoring", scoringCtrl.Score)
 
+	// ── Sync (offline-first) ─────────────────────────────────────────────────
+	syncRepo := repository.NewSyncRepository(db)
+	syncUC := usecase.NewSyncUsecase(syncRepo, memberUC, savingsUC, loanAppUC, installmentUC, loanConfigUC)
+	syncCtrl := controller.NewSyncController(syncUC, validate)
+	syncGroup := api.Group("/sync", middleware.Auth(cfg.JWT.Secret))
+	syncGroup.Get("/pull", syncCtrl.Pull)
+	syncGroup.Post("/push", middleware.RequireRole("pengurus"), syncCtrl.Push)
+
 	// ── Inventory (Tier 3) ────────────────────────────────────────────────────
 	inventory := api.Group("/inventory",
 		middleware.Auth(cfg.JWT.Secret),
