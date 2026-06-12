@@ -28,10 +28,10 @@ func (ctrl *AuthController) Login(c *fiber.Ctx) error {
 		return Fail(c, fiber.StatusBadRequest, "VALIDATION_ERROR", err.Error())
 	}
 
-	result, err := ctrl.authUC.Login(c.Context(), req.Email, req.Password)
+	result, err := ctrl.authUC.Login(c.Context(), req.Identifier, req.Password)
 	if err != nil {
 		if errors.Is(err, usecase.ErrInvalidCredentials) {
-			return Fail(c, fiber.StatusUnauthorized, "UNAUTHORIZED", "email atau password salah")
+			return Fail(c, fiber.StatusUnauthorized, "UNAUTHORIZED", "identifier atau password salah")
 		}
 		return Fail(c, fiber.StatusInternalServerError, "INTERNAL", "terjadi kesalahan server")
 	}

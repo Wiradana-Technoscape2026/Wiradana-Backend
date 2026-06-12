@@ -3,18 +3,21 @@ package usecase
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/wiradana/backend/internal/entity"
 	"github.com/wiradana/backend/internal/model"
 	"github.com/wiradana/backend/internal/model/converter"
 	"github.com/wiradana/backend/internal/repository"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/datatypes"
 )
 
 var (
-	ErrMemberNotFound = errors.New("anggota tidak ditemukan")
-	ErrDuplicateNIK   = errors.New("nik sudah terdaftar di koperasi ini")
+	ErrMemberNotFound    = errors.New("anggota tidak ditemukan")
+	ErrDuplicateNIK      = errors.New("nik sudah terdaftar di koperasi ini")
+	ErrAccountExists     = errors.New("akun login untuk NIK ini sudah ada")
 )
 
 type MemberUsecase interface {
@@ -26,10 +29,11 @@ type MemberUsecase interface {
 
 type memberUsecase struct {
 	memberRepo repository.MemberRepository
+	userRepo   repository.UserRepository
 }
 
-func NewMemberUsecase(memberRepo repository.MemberRepository) MemberUsecase {
-	return &memberUsecase{memberRepo: memberRepo}
+func NewMemberUsecase(memberRepo repository.MemberRepository, userRepo repository.UserRepository) MemberUsecase {
+	return &memberUsecase{memberRepo: memberRepo, userRepo: userRepo}
 }
 
 func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *model.CreateMemberRequest) (*model.MemberResponse, error) {
@@ -37,6 +41,8 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 	if err != nil {
 		return nil, errors.New("cooperative_id tidak valid")
 	}
+
+	hasPassword := req.Password != nil && *req.Password != ""
 
 	attrs := req.CustomAttributes
 	if attrs == nil {
@@ -65,9 +71,37 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 		return nil, err
 	}
 
+	if hasPassword {
+		hash, err := bcrypt.GenerateFromPassword([]byte(*req.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return nil, err
+		}
+		memberID := member.ID
+		// NIK disimpan di kolom email sebagai identifier login anggota.
+		// Login: POST /auth/login { "identifier": "<NIK>", "password": "..." }
+		appUser := &entity.AppUser{
+			CooperativeID: coopUUID,
+			MemberID:      &memberID,
+			Email:         member.NIK,
+			PasswordHash:  string(hash),
+			Role:          "anggota",
+		}
+		if err := u.userRepo.Create(ctx, appUser); err != nil {
+			if isDuplicateEmail(err) {
+				return nil, ErrAccountExists
+			}
+			return nil, err
+		}
+	}
+
 	summary, _ := u.memberRepo.GetSavingsSummary(ctx, member.ID.String())
 	resp := converter.ToMemberResponse(member, summary)
 	return &resp, nil
+}
+
+func isDuplicateEmail(err error) bool {
+	msg := err.Error()
+	return strings.Contains(msg, "23505") || strings.Contains(msg, "duplicate key")
 }
 
 func (u *memberUsecase) FindByID(ctx context.Context, cooperativeID, memberID string) (*model.MemberResponse, error) {

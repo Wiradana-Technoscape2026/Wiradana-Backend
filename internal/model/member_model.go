@@ -12,6 +12,9 @@ type CreateMemberRequest struct {
 	Address          string         `json:"address"`
 	BirthDate        string         `json:"birth_date"` // "YYYY-MM-DD", opsional
 	CustomAttributes datatypes.JSON `json:"custom_attributes"`
+	// Opsional: buat akun login anggota sekaligus. Password min 6 karakter.
+	// Login menggunakan NIK + password (bukan email).
+	Password *string `json:"password" validate:"omitempty,min=6"`
 }
 
 type UpdateMemberRequest struct {
