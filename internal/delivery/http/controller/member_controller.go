@@ -34,6 +34,9 @@ func (ctrl *MemberController) Create(c *fiber.Ctx) error {
 		if errors.Is(err, usecase.ErrDuplicateNIK) {
 			return Fail(c, fiber.StatusConflict, "CONFLICT", "NIK sudah terdaftar di koperasi ini")
 		}
+		if errors.Is(err, usecase.ErrAccountExists) {
+			return Fail(c, fiber.StatusConflict, "CONFLICT", "akun login untuk NIK ini sudah ada")
+		}
 		return Fail(c, fiber.StatusInternalServerError, "INTERNAL", "terjadi kesalahan server")
 	}
 

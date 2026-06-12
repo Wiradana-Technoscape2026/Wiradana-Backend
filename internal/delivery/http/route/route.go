@@ -34,7 +34,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 
 	// ── Usecases ──────────────────────────────────────────────────────────────
 	authUC := usecase.NewAuthUsecase(userRepo, cfg.JWT.Secret, cfg.JWT.ExpirationHours)
-	memberUC := usecase.NewMemberUsecase(memberRepo)
+	memberUC := usecase.NewMemberUsecase(memberRepo, userRepo)
 	savingsUC := usecase.NewSavingsUsecase(savingsRepo, memberRepo)
 	ocrUC := usecase.NewOCRUsecase(ocrGateway)
 	loanConfigUC := usecase.NewLoanConfigUsecase(loanConfigRepo)

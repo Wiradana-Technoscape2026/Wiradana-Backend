@@ -1,9 +1,10 @@
 package model
 
-// LoginRequest — POST /auth/login (api_planning §3.1)
+// LoginRequest — POST /auth/login
+// identifier = email (pengurus) atau NIK (anggota)
 type LoginRequest struct {
-	Email    string `json:"email"    validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Identifier string `json:"identifier" validate:"required"`
+	Password   string `json:"password"   validate:"required"`
 }
 
 // RegisterPengurusRequest — POST /auth/register/pengurus

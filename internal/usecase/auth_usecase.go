@@ -33,7 +33,7 @@ type jwtClaims struct {
 }
 
 type AuthUsecase interface {
-	Login(ctx context.Context, email, password string) (*LoginResult, error)
+	Login(ctx context.Context, identifier, password string) (*LoginResult, error)
 	RegisterPengurus(ctx context.Context, req *model.RegisterPengurusRequest) (*LoginResult, error)
 }
 
@@ -51,8 +51,8 @@ func NewAuthUsecase(userRepo repository.UserRepository, jwtSecret string, jwtExp
 	}
 }
 
-func (u *authUsecase) Login(ctx context.Context, email, password string) (*LoginResult, error) {
-	return u.loginWithContext(ctx, email, password)
+func (u *authUsecase) Login(ctx context.Context, identifier, password string) (*LoginResult, error) {
+	return u.loginWithContext(ctx, identifier, password)
 }
 
 func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterPengurusRequest) (*LoginResult, error) {
@@ -90,8 +90,9 @@ func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterP
 	return u.buildLoginResult(user)
 }
 
-func (u *authUsecase) loginWithContext(ctx context.Context, email, password string) (*LoginResult, error) {
-	user, err := u.userRepo.FindByEmail(ctx, email)
+// loginWithContext mencari user berdasarkan identifier (email untuk pengurus, NIK untuk anggota).
+func (u *authUsecase) loginWithContext(ctx context.Context, identifier, password string) (*LoginResult, error) {
+	user, err := u.userRepo.FindByEmail(ctx, identifier)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrInvalidCredentials
