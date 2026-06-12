@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS coop_module;
+DROP TABLE IF EXISTS shu_distribution;
+DROP TABLE IF EXISTS shu_period;
+DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS installment_schedule;
+DROP TABLE IF EXISTS loan;
+DROP TABLE IF EXISTS credit_assessment;
+DROP TABLE IF EXISTS loan_application;
+DROP TABLE IF EXISTS loan_config;
+DROP TABLE IF EXISTS savings_transaction;
+DROP TABLE IF EXISTS app_user;
+DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS cooperative;
