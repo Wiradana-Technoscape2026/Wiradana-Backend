@@ -165,6 +165,7 @@ func mapToKTPResult(d *apiCoIDKTPData) *KTPOCRResult {
 		NIK:        d.NIK,
 		FullName:   d.Nama,
 		Address:    address,
+		Pekerjaan:  d.Pekerjaan,
 		BirthDate:  birthDate,
 		Confidence: confidence,
 		Source:     "API_CO_ID",

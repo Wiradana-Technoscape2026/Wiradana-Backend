@@ -15,6 +15,7 @@ type KTPOCRResult struct {
 	NIK        string  `json:"nik"`
 	FullName   string  `json:"full_name"`
 	Address    string  `json:"address"`
+	Pekerjaan  string  `json:"pekerjaan"`
 	BirthDate  string  `json:"birth_date"` // "YYYY-MM-DD"
 	Confidence float64 `json:"confidence"`
 	Source     string  `json:"source"`
