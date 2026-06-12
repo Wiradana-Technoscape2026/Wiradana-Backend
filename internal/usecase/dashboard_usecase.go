@@ -25,20 +25,43 @@ func (u *dashboardUsecase) Get(ctx context.Context, cooperativeID string) (*mode
 		return nil, err
 	}
 
-	notifs, err := u.dashboardRepo.GetUpcomingNotifications(ctx, cooperativeID)
+	upcomingCount, err := u.dashboardRepo.GetUpcomingInstallmentsCount(ctx, cooperativeID)
 	if err != nil {
 		return nil, err
 	}
 
-	if notifs == nil {
-		notifs = []model.DashboardNotification{}
+	upcoming, err := u.dashboardRepo.GetUpcomingInstallments(ctx, cooperativeID)
+	if err != nil {
+		return nil, err
+	}
+
+	pendingCount, err := u.dashboardRepo.GetPendingApplicationsCount(ctx, cooperativeID)
+	if err != nil {
+		return nil, err
+	}
+
+	pending, err := u.dashboardRepo.GetPendingApplications(ctx, cooperativeID)
+	if err != nil {
+		return nil, err
+	}
+
+	if upcoming == nil {
+		upcoming = []model.UpcomingInstallment{}
+	}
+	if pending == nil {
+		pending = []model.PendingApplication{}
 	}
 
 	return &model.DashboardResponse{
-		TotalMembers:  stats.TotalMembers,
-		TotalSavings:  stats.TotalSavings,
-		ActiveLoans:   stats.ActiveLoans,
-		OverdueLoans:  stats.OverdueLoans,
-		Notifications: notifs,
+		ActiveMembers:             stats.ActiveMembers,
+		TotalMembers:              stats.TotalMembers,
+		TotalSavings:              stats.TotalSavings,
+		ActiveLoans:               stats.ActiveLoans,
+		ActiveLoansOutstanding:    stats.ActiveLoansOutstanding,
+		OverdueLoans:              stats.OverdueLoans,
+		UpcomingInstallmentsCount: upcomingCount,
+		UpcomingInstallments:      upcoming,
+		PendingApplicationsCount:  pendingCount,
+		PendingApplications:       pending,
 	}, nil
 }
