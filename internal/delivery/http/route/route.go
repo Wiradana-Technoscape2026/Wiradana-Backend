@@ -21,6 +21,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	// ── Repositories ──────────────────────────────────────────────────────────
 	userRepo := repository.NewUserRepository(db)
 	memberRepo := repository.NewMemberRepository(db)
+	savingsRepo := repository.NewSavingsRepository(db)
 	loanConfigRepo := repository.NewLoanConfigRepository(db)
 	loanAppRepo := repository.NewLoanApplicationRepository(db)
 	loanRepo := repository.NewLoanRepository(db)
@@ -33,6 +34,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	// ── Usecases ──────────────────────────────────────────────────────────────
 	authUC := usecase.NewAuthUsecase(userRepo, cfg.JWT.Secret, cfg.JWT.ExpirationHours)
 	memberUC := usecase.NewMemberUsecase(memberRepo)
+	savingsUC := usecase.NewSavingsUsecase(savingsRepo, memberRepo)
 	ocrUC := usecase.NewOCRUsecase(ocrGateway)
 	loanConfigUC := usecase.NewLoanConfigUsecase(loanConfigRepo)
 	loanAppUC := usecase.NewLoanApplicationUsecase(loanAppRepo, loanConfigRepo, memberRepo, loanRepo, scoringGateway)
@@ -42,6 +44,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	// ── Controllers ───────────────────────────────────────────────────────────
 	authCtrl := controller.NewAuthController(authUC, validate)
 	memberCtrl := controller.NewMemberController(memberUC, validate)
+	savingsCtrl := controller.NewSavingsController(savingsUC, validate)
 	ocrCtrl := controller.NewOCRController(ocrUC, log)
 	loanConfigCtrl := controller.NewLoanConfigController(loanConfigUC, validate)
 	loanAppCtrl := controller.NewLoanApplicationController(loanAppUC, validate)
@@ -62,6 +65,8 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	pengurus.Get("/members", memberCtrl.List)
 	pengurus.Get("/members/:id", memberCtrl.GetByID)
 	pengurus.Put("/members/:id", memberCtrl.Update)
+	pengurus.Get("/members/:id/savings", savingsCtrl.List)
+	pengurus.Post("/members/:id/savings", savingsCtrl.Record)
 
 	pengurus.Get("/loan-config", loanConfigCtrl.Get)
 	pengurus.Put("/loan-config", loanConfigCtrl.Update)
