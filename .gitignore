@@ -1,0 +1,13 @@
+config.json
+*.exe
+*.exe~
+bin/
+*.test
+*.out
+vendor/
+go.work
+go.work.sum
+.idea/
+.vscode/
+/docs
+CLAUDE.md
