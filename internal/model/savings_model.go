@@ -2,23 +2,12 @@ package model
 
 import "time"
 
-<<<<<<< HEAD
-// CreateSavingsRequest — POST /members/:id/savings (api_planning §3.3)
-type CreateSavingsRequest struct {
-	SavingsType string `json:"savings_type" validate:"required,oneof=pokok wajib sukarela"`
-	Direction   string `json:"direction"   validate:"required,oneof=setor tarik"`
-	Amount      int64  `json:"amount"      validate:"required,gt=0"`
-}
-
-// SavingsTransactionResponse — api_planning §2.3
-=======
 type CreateSavingsRequest struct {
 	SavingsType string `json:"savings_type" validate:"required,oneof=pokok wajib sukarela"`
 	Direction   string `json:"direction"    validate:"required,oneof=setor tarik"`
 	Amount      int64  `json:"amount"       validate:"required,gt=0"`
 }
 
->>>>>>> e6c7f422c936b4876b95b9366e0dc7eebfff82ed
 type SavingsTransactionResponse struct {
 	ID          string    `json:"id"`
 	MemberID    string    `json:"member_id"`

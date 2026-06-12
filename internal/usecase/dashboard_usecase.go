@@ -8,21 +8,6 @@ import (
 )
 
 type DashboardUsecase interface {
-<<<<<<< HEAD
-	Get(ctx context.Context, coopID string) (*model.DashboardResponse, error)
-}
-
-type dashboardUsecase struct {
-	repo repository.DashboardRepository
-}
-
-func NewDashboardUsecase(repo repository.DashboardRepository) DashboardUsecase {
-	return &dashboardUsecase{repo: repo}
-}
-
-func (u *dashboardUsecase) Get(ctx context.Context, coopID string) (*model.DashboardResponse, error) {
-	return u.repo.GetStats(ctx, coopID)
-=======
 	Get(ctx context.Context, cooperativeID string) (*model.DashboardResponse, error)
 }
 
@@ -56,5 +41,4 @@ func (u *dashboardUsecase) Get(ctx context.Context, cooperativeID string) (*mode
 		OverdueLoans:  stats.OverdueLoans,
 		Notifications: notifs,
 	}, nil
->>>>>>> e6c7f422c936b4876b95b9366e0dc7eebfff82ed
 }
