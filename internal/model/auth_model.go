@@ -6,6 +6,13 @@ type LoginRequest struct {
 	Password string `json:"password" validate:"required"`
 }
 
+// RegisterPengurusRequest — POST /auth/register/pengurus
+type RegisterPengurusRequest struct {
+	CooperativeID string `json:"cooperative_id" validate:"required,uuid"`
+	Email         string `json:"email" validate:"required,email"`
+	Password      string `json:"password" validate:"required,min=8"`
+}
+
 // AppUserResponse — api_planning §2.1
 type AppUserResponse struct {
 	ID       string  `json:"id"`
