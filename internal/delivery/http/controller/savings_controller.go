@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"errors"
 
 	"github.com/go-playground/validator/v10"
@@ -11,11 +12,12 @@ import (
 
 type SavingsController struct {
 	savingsUC usecase.SavingsUsecase
+	notifUC   usecase.NotificationUsecase
 	validate  *validator.Validate
 }
 
-func NewSavingsController(savingsUC usecase.SavingsUsecase, validate *validator.Validate) *SavingsController {
-	return &SavingsController{savingsUC: savingsUC, validate: validate}
+func NewSavingsController(savingsUC usecase.SavingsUsecase, notifUC usecase.NotificationUsecase, validate *validator.Validate) *SavingsController {
+	return &SavingsController{savingsUC: savingsUC, notifUC: notifUC, validate: validate}
 }
 
 func (ctrl *SavingsController) List(c *fiber.Ctx) error {
@@ -58,6 +60,10 @@ func (ctrl *SavingsController) Record(c *fiber.Ctx) error {
 			return Fail(c, fiber.StatusConflict, "CONFLICT", "saldo sukarela tidak mencukupi")
 		}
 		return Fail(c, fiber.StatusInternalServerError, "INTERNAL", "terjadi kesalahan server")
+	}
+
+	if req.Direction == "setor" {
+		go ctrl.notifUC.SendSavingsConfirmation(context.Background(), coopID, memberID, tx.ID, tx.Amount, tx.SavingsType)
 	}
 
 	return OK(c, tx)

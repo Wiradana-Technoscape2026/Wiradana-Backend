@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -11,11 +13,12 @@ import (
 
 type LoanApplicationController struct {
 	uc       usecase.LoanApplicationUsecase
+	notifUC  usecase.NotificationUsecase
 	validate *validator.Validate
 }
 
-func NewLoanApplicationController(uc usecase.LoanApplicationUsecase, validate *validator.Validate) *LoanApplicationController {
-	return &LoanApplicationController{uc: uc, validate: validate}
+func NewLoanApplicationController(uc usecase.LoanApplicationUsecase, notifUC usecase.NotificationUsecase, validate *validator.Validate) *LoanApplicationController {
+	return &LoanApplicationController{uc: uc, notifUC: notifUC, validate: validate}
 }
 
 func (ctrl *LoanApplicationController) List(c *fiber.Ctx) error {
@@ -68,6 +71,13 @@ func (ctrl *LoanApplicationController) Approve(c *fiber.Ctx) error {
 			return Fail(c, fiber.StatusInternalServerError, "INTERNAL", err.Error())
 		}
 	}
+
+	if len(resp.Loan.Schedule) > 0 {
+		if firstDue, parseErr := time.Parse("2006-01-02", resp.Loan.Schedule[0].DueDate); parseErr == nil {
+			go ctrl.notifUC.SendLoanDisbursed(context.Background(), coopID, resp.Loan.MemberID, resp.Loan.ID, resp.Loan.Principal, firstDue)
+		}
+	}
+
 	return OK(c, resp)
 }
 
