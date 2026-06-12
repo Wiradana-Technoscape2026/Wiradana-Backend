@@ -1,6 +1,8 @@
 package route
 
 import (
+	"context"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
@@ -8,7 +10,9 @@ import (
 	"github.com/wiradana/backend/internal/delivery/http/controller"
 	"github.com/wiradana/backend/internal/delivery/http/middleware"
 	"github.com/wiradana/backend/internal/gateway/adins"
+	gwnot "github.com/wiradana/backend/internal/gateway/notification"
 	"github.com/wiradana/backend/internal/repository"
+	"github.com/wiradana/backend/internal/scheduler"
 	"github.com/wiradana/backend/internal/usecase"
 	"gorm.io/gorm"
 )
@@ -30,10 +34,18 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	shuRepo := repository.NewShuRepository(db)
 	moduleRepo := repository.NewModuleRepository(db)
 	inventoryRepo := repository.NewInventoryRepository(db)
+	notifRepo := repository.NewNotificationRepository(db)
 
 	// ── Gateways ──────────────────────────────────────────────────────────────
 	ocrGateway := adins.NewAPICoIDGateway(cfg.OCR.APIKey, cfg.OCR.BaseURL)
 	scoringGateway := adins.NewMockScoringGateway()
+
+	var notifGateway gwnot.Gateway
+	if cfg.WhatsApp.Mode == "sandbox" {
+		notifGateway = gwnot.NewWhatsAppGateway(cfg.WhatsApp.Token, cfg.WhatsApp.PhoneID)
+	} else {
+		notifGateway = gwnot.NewMockGateway(log)
+	}
 
 	// ── Usecases ──────────────────────────────────────────────────────────────
 	authUC := usecase.NewAuthUsecase(userRepo, cfg.JWT.Secret, cfg.JWT.ExpirationHours)
@@ -48,14 +60,15 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	shuUC := usecase.NewShuUsecase(shuRepo)
 	moduleUC := usecase.NewModuleUsecase(moduleRepo)
 	inventoryUC := usecase.NewInventoryUsecase(inventoryRepo)
+	notifUC := usecase.NewNotificationUsecase(notifRepo, memberRepo, notifGateway)
 
 	// ── Controllers ───────────────────────────────────────────────────────────
 	authCtrl := controller.NewAuthController(authUC, validate)
 	memberCtrl := controller.NewMemberController(memberUC, validate)
-	savingsCtrl := controller.NewSavingsController(savingsUC, validate)
+	savingsCtrl := controller.NewSavingsController(savingsUC, notifUC, validate)
 	ocrCtrl := controller.NewOCRController(ocrUC, log)
 	loanConfigCtrl := controller.NewLoanConfigController(loanConfigUC, validate)
-	loanAppCtrl := controller.NewLoanApplicationController(loanAppUC, validate)
+	loanAppCtrl := controller.NewLoanApplicationController(loanAppUC, notifUC, validate)
 	loanCtrl := controller.NewLoanController(loanUC)
 	installmentCtrl := controller.NewInstallmentController(installmentUC, validate)
 	scoringCtrl := controller.NewScoringController(scoringGateway)
@@ -65,6 +78,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	moduleCtrl := controller.NewModuleController(moduleUC, validate)
 	inventoryCtrl := controller.NewInventoryController(inventoryUC, validate)
 	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC)
+	notifCtrl := controller.NewNotificationController(notifUC)
 
 	api := app.Group("/api/v1")
 
@@ -105,6 +119,9 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	pengurus.Get("/modules", moduleCtrl.List)
 	pengurus.Put("/modules/:key", moduleCtrl.Update)
 
+	pengurus.Get("/notifications/logs", notifCtrl.ListLogs)
+	pengurus.Post("/notifications/trigger", notifCtrl.Trigger)
+
 	// ── Portal Anggota ────────────────────────────────────────────────────────
 	portal := api.Group("/portal", middleware.Auth(cfg.JWT.Secret), middleware.RequireRole("anggota"))
 	portal.Get("/me", portalCtrl.Me)
@@ -140,6 +157,8 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	inventory.Post("/products", inventoryCtrl.CreateProduct)
 	inventory.Put("/products/:id", inventoryCtrl.UpdateProduct)
 	inventory.Post("/products/:id/movements", inventoryCtrl.RecordMovement)
+
+	scheduler.StartNotificationScheduler(context.Background(), notifUC, log)
 
 	log.Info("routes registered")
 }

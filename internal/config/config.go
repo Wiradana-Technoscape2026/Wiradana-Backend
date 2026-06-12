@@ -12,11 +12,18 @@ type Config struct {
 	Database DatabaseConfig
 	JWT      JWTConfig
 	OCR      OCRConfig
+	WhatsApp WhatsAppConfig
 }
 
 type OCRConfig struct {
 	APIKey  string
 	BaseURL string
+}
+
+type WhatsAppConfig struct {
+	Mode    string // "mock" | "sandbox"
+	Token   string
+	PhoneID string
 }
 
 type AppConfig struct {
@@ -52,6 +59,7 @@ func NewConfig() (*Config, error) {
 	v.SetDefault("APP_NAME", "Wiradana Backend")
 	v.SetDefault("JWT_EXPIRATION_HOURS", 24)
 	v.SetDefault("OCR_BASE_URL", "https://use.api.co.id")
+	v.SetDefault("WA_MODE", "mock")
 
 	cfg := &Config{
 		App: AppConfig{
@@ -69,6 +77,11 @@ func NewConfig() (*Config, error) {
 		OCR: OCRConfig{
 			APIKey:  v.GetString("OCR_API_KEY"),
 			BaseURL: v.GetString("OCR_BASE_URL"),
+		},
+		WhatsApp: WhatsAppConfig{
+			Mode:    v.GetString("WA_MODE"),
+			Token:   v.GetString("WA_TOKEN"),
+			PhoneID: v.GetString("WA_PHONE_ID"),
 		},
 	}
 
