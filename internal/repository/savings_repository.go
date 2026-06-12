@@ -13,17 +13,17 @@ type SavingsRepository interface {
 	FindByMember(ctx context.Context, cooperativeID, memberID string) ([]*entity.SavingsTransaction, error)
 	CountPokok(ctx context.Context, memberID, cooperativeID string) (int64, error)
 	GetSukarelaBalance(ctx context.Context, memberID, cooperativeID string) (int64, error)
-	GetCoopSummary(ctx context.Context, cooperativeID string) (*coopSavingsSummaryRow, error)
-	FindAllRecent(ctx context.Context, cooperativeID, savingsType, direction string, limit, offset int) ([]*savingsTxWithMemberRow, int64, error)
+	GetCoopSummary(ctx context.Context, cooperativeID string) (*CoopSavingsSummaryRow, error)
+	FindAllRecent(ctx context.Context, cooperativeID, savingsType, direction string, limit, offset int) ([]*SavingsTxWithMemberRow, int64, error)
 }
 
-type coopSavingsSummaryRow struct {
+type CoopSavingsSummaryRow struct {
 	Pokok    int64 `gorm:"column:pokok"`
 	Wajib    int64 `gorm:"column:wajib"`
 	Sukarela int64 `gorm:"column:sukarela"`
 }
 
-type savingsTxWithMemberRow struct {
+type SavingsTxWithMemberRow struct {
 	ID          string    `gorm:"column:id"`
 	MemberID    string    `gorm:"column:member_id"`
 	MemberName  string    `gorm:"column:member_name"`
@@ -74,8 +74,8 @@ func (r *savingsRepository) GetSukarelaBalance(ctx context.Context, memberID, co
 	return balance, err
 }
 
-func (r *savingsRepository) GetCoopSummary(ctx context.Context, cooperativeID string) (*coopSavingsSummaryRow, error) {
-	var row coopSavingsSummaryRow
+func (r *savingsRepository) GetCoopSummary(ctx context.Context, cooperativeID string) (*CoopSavingsSummaryRow, error) {
+	var row CoopSavingsSummaryRow
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT
 			COALESCE(SUM(amount) FILTER (WHERE savings_type = 'pokok'    AND direction = 'setor'), 0) AS pokok,
@@ -89,8 +89,8 @@ func (r *savingsRepository) GetCoopSummary(ctx context.Context, cooperativeID st
 	return &row, err
 }
 
-func (r *savingsRepository) FindAllRecent(ctx context.Context, cooperativeID, savingsType, direction string, limit, offset int) ([]*savingsTxWithMemberRow, int64, error) {
-	var rows []*savingsTxWithMemberRow
+func (r *savingsRepository) FindAllRecent(ctx context.Context, cooperativeID, savingsType, direction string, limit, offset int) ([]*SavingsTxWithMemberRow, int64, error) {
+	var rows []*SavingsTxWithMemberRow
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT st.id, st.member_id, m.full_name AS member_name,
 		       st.savings_type, st.direction, st.amount, st.created_at
