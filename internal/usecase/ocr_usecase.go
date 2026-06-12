@@ -46,6 +46,7 @@ func (u *ocrUsecase) ExtractKTP(ctx context.Context, image []byte, filename stri
 		NIK:        result.NIK,
 		FullName:   result.FullName,
 		Address:    result.Address,
+		Pekerjaan:  result.Pekerjaan,
 		BirthDate:  result.BirthDate,
 		Confidence: result.Confidence,
 		Source:     result.Source,
