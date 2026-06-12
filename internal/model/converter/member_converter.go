@@ -17,6 +17,11 @@ func ToMemberResponse(m *entity.Member, summary *model.SavingsSummary) model.Mem
 		address = *m.Address
 	}
 
+	phoneNumber := ""
+	if m.PhoneNumber != nil {
+		phoneNumber = *m.PhoneNumber
+	}
+
 	attrs := m.CustomAttributes
 	if attrs == nil {
 		attrs = datatypes.JSON("{}")
@@ -33,6 +38,7 @@ func ToMemberResponse(m *entity.Member, summary *model.SavingsSummary) model.Mem
 		NIK:              m.NIK,
 		FullName:         m.FullName,
 		Address:          address,
+		PhoneNumber:      phoneNumber,
 		BirthDate:        birthDate,
 		Status:           m.Status,
 		CustomAttributes: attrs,
