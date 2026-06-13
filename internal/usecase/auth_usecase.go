@@ -38,6 +38,7 @@ type AuthUsecase interface {
 	Login(ctx context.Context, identifier, password string) (*LoginResult, error)
 	SelectCooperative(ctx context.Context, identifier, password, cooperativeID string) (*LoginResult, error)
 	RegisterPengurus(ctx context.Context, req *model.RegisterPengurusRequest) (*LoginResult, error)
+	GetUserCooperatives(ctx context.Context, userID string) ([]repository.MembershipInfo, error)
 }
 
 type authUsecase struct {
@@ -144,6 +145,10 @@ func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterP
 	_ = u.userRepo.CreateMembership(ctx, membership) // best-effort; user sudah terbuat
 
 	return u.buildLoginResult(user)
+}
+
+func (u *authUsecase) GetUserCooperatives(ctx context.Context, userID string) ([]repository.MembershipInfo, error) {
+	return u.userRepo.FindMembershipsByUserID(ctx, userID)
 }
 
 func (u *authUsecase) findAndVerify(ctx context.Context, identifier, password string) (*entity.AppUser, error) {

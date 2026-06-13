@@ -83,7 +83,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	shuCtrl := controller.NewShuController(shuUC, validate)
 	moduleCtrl := controller.NewModuleController(moduleUC, validate)
 	inventoryCtrl := controller.NewInventoryController(inventoryUC, validate)
-	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC)
+	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC, authUC, dashboardUC)
 	notifCtrl := controller.NewNotificationController(notifUC)
 
 	// ── Middleware shorthands ─────────────────────────────────────────────────
@@ -146,6 +146,8 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	portal := api.Group("/portal")
 	portal.Get("/me", a(portalCtrl.Me)...)
 	portal.Get("/shu", a(portalCtrl.SHU)...)
+	portal.Get("/cooperatives", a(portalCtrl.Cooperatives)...)
+	portal.Get("/dashboard", a(portalCtrl.MemberDashboard)...)
 	portal.Get("/loan-applications", a(portalLoanCtrl.ListApplications)...)
 	portal.Post("/loan-applications", a(portalLoanCtrl.Apply)...)
 	portal.Get("/loans", a(portalLoanCtrl.ListLoans)...)
