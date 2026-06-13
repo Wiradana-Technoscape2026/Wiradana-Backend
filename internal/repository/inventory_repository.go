@@ -10,9 +10,9 @@ import (
 )
 
 var (
-	ErrProductNotFound       = errors.New("produk tidak ditemukan")
-	ErrFieldDefNotFound      = errors.New("field def tidak ditemukan")
-	ErrInsufficientStock     = errors.New("stok tidak mencukupi")
+	ErrProductNotFound   = errors.New("produk tidak ditemukan")
+	ErrFieldDefNotFound  = errors.New("field def tidak ditemukan")
+	ErrInsufficientStock = errors.New("stok tidak mencukupi")
 )
 
 type ProductWithStock struct {
@@ -90,9 +90,15 @@ func (r *inventoryRepository) FindAllProducts(ctx context.Context, coopID string
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT p.*,
 			COALESCE(
-				(SELECT SUM(quantity) FILTER (WHERE direction = 'masuk'))
-				- (SELECT SUM(quantity) FILTER (WHERE direction = 'keluar')),
-			0) AS stock
+				(
+					SELECT
+						COALESCE(SUM(CASE WHEN m.direction = 'masuk' THEN m.quantity ELSE 0 END), 0)
+					  - COALESCE(SUM(CASE WHEN m.direction = 'keluar' THEN m.quantity ELSE 0 END), 0)
+					FROM inventory_movement m
+					WHERE m.product_id = p.id
+				),
+				0
+			)::bigint AS stock
 		FROM inventory_product p
 		WHERE p.cooperative_id = ?
 		ORDER BY p.name ASC
@@ -105,9 +111,15 @@ func (r *inventoryRepository) FindProductByID(ctx context.Context, coopID, id st
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT p.*,
 			COALESCE(
-				(SELECT SUM(quantity) FILTER (WHERE direction = 'masuk'))
-				- (SELECT SUM(quantity) FILTER (WHERE direction = 'keluar')),
-			0) AS stock
+				(
+					SELECT
+						COALESCE(SUM(CASE WHEN m.direction = 'masuk' THEN m.quantity ELSE 0 END), 0)
+					  - COALESCE(SUM(CASE WHEN m.direction = 'keluar' THEN m.quantity ELSE 0 END), 0)
+					FROM inventory_movement m
+					WHERE m.product_id = p.id
+				),
+				0
+			)::bigint AS stock
 		FROM inventory_product p
 		WHERE p.id = ? AND p.cooperative_id = ?
 	`, id, coopID).Scan(&p).Error
