@@ -42,9 +42,22 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 		return nil, errors.New("cooperative_id tidak valid")
 	}
 
-	// NIK sudah terdaftar → kembalikan data existing tanpa error.
+	// NIK sudah terdaftar di koperasi ini → pastikan membership-nya ada, lalu kembalikan data.
 	existing, err := u.memberRepo.FindByNIK(ctx, cooperativeID, req.NIK)
 	if err == nil {
+		// Perbaiki partial state: member ada tapi membership mungkin belum dibuat
+		// (terjadi jika registrasi sebelumnya gagal setelah insert member).
+		if req.Password != nil && *req.Password != "" {
+			if appUser, uerr := u.userRepo.FindByEmail(ctx, req.NIK); uerr == nil {
+				existingMemberID := existing.ID
+				membership := &entity.UserCooperativeMembership{
+					UserID:        appUser.ID,
+					CooperativeID: coopUUID,
+					MemberID:      &existingMemberID,
+				}
+				_ = u.userRepo.CreateMembership(ctx, membership) // ON CONFLICT (user_id, cooperative_id) DO NOTHING
+			}
+		}
 		summary, _ := u.memberRepo.GetSavingsSummary(ctx, existing.ID.String())
 		resp := converter.ToMemberResponse(existing, summary)
 		return &resp, nil
