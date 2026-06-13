@@ -114,3 +114,25 @@ func ToPaymentResponse(p *entity.Payment) model.PaymentResponse {
 		PaidAt:     p.PaidAt.Format(time.RFC3339),
 	}
 }
+
+func ToLoanAuditLogResponse(l *entity.LoanAuditLog, performedByEmail string) model.LoanAuditLogResponse {
+	flaggedAt := ""
+	if l.FlaggedAt != nil {
+		flaggedAt = l.FlaggedAt.Format(time.RFC3339)
+	}
+	return model.LoanAuditLogResponse{
+		ID:               l.ID.String(),
+		LoanID:           l.LoanID.String(),
+		Action:           l.Action,
+		PerformedByEmail: performedByEmail,
+		PerformedAt:      l.PerformedAt.Format(time.RFC3339),
+		BeforeData:       string(l.BeforeData),
+		AfterData:        string(l.AfterData),
+		Note:             l.Note,
+		IsFlagged:        l.IsFlagged,
+		FlaggedByName:    l.FlaggedByName,
+		FlaggedAt:        flaggedAt,
+		FlaggedReason:    l.FlaggedReason,
+	}
+}
+

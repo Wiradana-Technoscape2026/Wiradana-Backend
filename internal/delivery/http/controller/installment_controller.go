@@ -27,7 +27,8 @@ func (ctrl *InstallmentController) Pay(c *fiber.Ctx) error {
 	if err := ctrl.validate.Struct(req); err != nil {
 		return Fail(c, fiber.StatusBadRequest, "VALIDATION_ERROR", err.Error())
 	}
-	resp, err := ctrl.uc.Pay(c.Context(), scheduleID, &req)
+	userID, _ := c.Locals("user_id").(string)
+	resp, err := ctrl.uc.Pay(c.Context(), scheduleID, &req, userID)
 	if err != nil {
 		if errors.Is(err, usecase.ErrInstallmentNotFound) {
 			return Fail(c, fiber.StatusNotFound, "NOT_FOUND", "angsuran tidak ditemukan")
@@ -36,3 +37,4 @@ func (ctrl *InstallmentController) Pay(c *fiber.Ctx) error {
 	}
 	return OK(c, resp)
 }
+
