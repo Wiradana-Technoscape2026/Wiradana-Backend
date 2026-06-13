@@ -136,3 +136,41 @@ type CreditScoringResponse struct {
 	Reasons          []string `json:"reasons"`
 	Source           string   `json:"source"`
 }
+
+// ---- Loan Audit ----
+
+type LoanAuditLogResponse struct {
+	ID               string `json:"id"`
+	LoanID           string `json:"loan_id"`
+	Action           string `json:"action"`
+	PerformedByEmail string `json:"performed_by_email"`
+	PerformedAt      string `json:"performed_at"`
+	BeforeData       string `json:"before_data"` // JSON string
+	AfterData        string `json:"after_data"`  // JSON string
+	Note             string `json:"note"`
+	IsFlagged        bool   `json:"is_flagged"`
+	FlaggedByName    string `json:"flagged_by_name,omitempty"`
+	FlaggedAt        string `json:"flagged_at,omitempty"`
+	FlaggedReason    string `json:"flagged_reason,omitempty"`
+}
+
+type CreateAuditTokenRequest struct {
+	ExpiresInHours int `json:"expires_in_hours" validate:"required,gt=0"`
+}
+
+type CreateAuditTokenResponse struct {
+	Token     string `json:"token"`
+	ExpiresAt string `json:"expires_at"`
+	AuditURL  string `json:"audit_url"`
+}
+
+type FlagAuditLogRequest struct {
+	AuditLogID    string `json:"audit_log_id" validate:"required,uuid"`
+	FlaggedByName string `json:"flagged_by_name" validate:"required"`
+	FlaggedReason string `json:"flagged_reason" validate:"required"`
+}
+
+type LoanAuditDetailResponse struct {
+	Loan      LoanResponse           `json:"loan"`
+	AuditLogs []LoanAuditLogResponse `json:"audit_logs"`
+}
