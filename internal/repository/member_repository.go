@@ -20,6 +20,7 @@ var (
 type MemberRepository interface {
 	Create(ctx context.Context, member *entity.Member) error
 	FindByID(ctx context.Context, cooperativeID, memberID string) (*entity.Member, error)
+	FindByNIK(ctx context.Context, cooperativeID, nik string) (*entity.Member, error)
 	FindAll(ctx context.Context, cooperativeID, search, status string) ([]*entity.Member, error)
 	Update(ctx context.Context, member *entity.Member) error
 	GetSavingsSummary(ctx context.Context, memberID string) (*model.SavingsSummary, error)
@@ -48,6 +49,20 @@ func (r *memberRepository) FindByID(ctx context.Context, cooperativeID, memberID
 	var member entity.Member
 	err := r.db.WithContext(ctx).
 		Where("id = ? AND cooperative_id = ?", memberID, cooperativeID).
+		First(&member).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrMemberNotFound
+		}
+		return nil, err
+	}
+	return &member, nil
+}
+
+func (r *memberRepository) FindByNIK(ctx context.Context, cooperativeID, nik string) (*entity.Member, error) {
+	var member entity.Member
+	err := r.db.WithContext(ctx).
+		Where("nik = ? AND cooperative_id = ?", nik, cooperativeID).
 		First(&member).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

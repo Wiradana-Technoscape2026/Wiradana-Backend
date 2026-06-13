@@ -44,6 +44,9 @@ func (m *mockMemberRepo) Create(_ context.Context, _ *entity.Member) error { ret
 func (m *mockMemberRepo) FindByID(_ context.Context, _, _ string) (*entity.Member, error) {
 	return &entity.Member{FullName: "Test Member", Status: "aktif"}, nil
 }
+func (m *mockMemberRepo) FindByNIK(_ context.Context, _, _ string) (*entity.Member, error) {
+	return nil, repository.ErrMemberNotFound
+}
 func (m *mockMemberRepo) FindAll(_ context.Context, _, _, _ string) ([]*entity.Member, error) {
 	return nil, nil
 }

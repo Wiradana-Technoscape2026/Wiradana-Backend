@@ -42,6 +42,17 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 		return nil, errors.New("cooperative_id tidak valid")
 	}
 
+	// NIK sudah terdaftar → kembalikan data existing tanpa error.
+	existing, err := u.memberRepo.FindByNIK(ctx, cooperativeID, req.NIK)
+	if err == nil {
+		summary, _ := u.memberRepo.GetSavingsSummary(ctx, existing.ID.String())
+		resp := converter.ToMemberResponse(existing, summary)
+		return &resp, nil
+	}
+	if !errors.Is(err, repository.ErrMemberNotFound) {
+		return nil, err
+	}
+
 	hasPassword := req.Password != nil && *req.Password != ""
 
 	attrs := req.CustomAttributes
@@ -68,8 +79,14 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 	}
 
 	if err := u.memberRepo.Create(ctx, member); err != nil {
+		// Race condition: NIK terdaftar di antara cek dan insert — kembalikan data existing.
 		if errors.Is(err, repository.ErrDuplicateNIK) {
-			return nil, ErrDuplicateNIK
+			existing, ferr := u.memberRepo.FindByNIK(ctx, cooperativeID, req.NIK)
+			if ferr == nil {
+				summary, _ := u.memberRepo.GetSavingsSummary(ctx, existing.ID.String())
+				resp := converter.ToMemberResponse(existing, summary)
+				return &resp, nil
+			}
 		}
 		return nil, err
 	}

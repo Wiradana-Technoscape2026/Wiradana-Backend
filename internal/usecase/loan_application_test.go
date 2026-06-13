@@ -79,6 +79,9 @@ func (m *memberRepoForApp) FindByID(_ context.Context, _, _ string) (*entity.Mem
 		JoinedAt: time.Now().AddDate(0, -12, 0),
 	}, nil
 }
+func (m *memberRepoForApp) FindByNIK(_ context.Context, _, _ string) (*entity.Member, error) {
+	return nil, repository.ErrMemberNotFound
+}
 func (m *memberRepoForApp) FindAll(_ context.Context, _, _, _ string) ([]*entity.Member, error) {
 	return nil, nil
 }
