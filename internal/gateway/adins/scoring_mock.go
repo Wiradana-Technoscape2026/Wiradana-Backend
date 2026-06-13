@@ -16,7 +16,7 @@ func (g *MockScoringGateway) Score(_ context.Context, in ScoringInput) (ScoringR
 	raw := 100 * (
 		0.35*f["ketepatan_bayar"] +
 			0.25*math.Min(f["rasio_simpanan_pinjaman"], 1) +
-			0.15*math.Min(f["lama_keanggotaan_bulan"]/36, 1) +
+			0.15*math.Min(f["lama_keanggotaan_hari"]/1080, 1) +
 			0.15*f["konsistensi_simpanan"] +
 			0.10*(1-math.Min(f["rasio_beban_angsuran"], 1)))
 	score := int(math.Round(raw))
@@ -65,7 +65,7 @@ func generateReasons(f map[string]float64) []string {
 	} else if f["rasio_simpanan_pinjaman"] < 0.2 {
 		reasons = append(reasons, "simpanan relatif kecil dibanding pinjaman")
 	}
-	if f["lama_keanggotaan_bulan"] >= 24 {
+	if f["lama_keanggotaan_hari"] >= 720 {
 		reasons = append(reasons, "anggota lama dan loyal")
 	}
 	if f["rasio_beban_angsuran"] > 0.7 {

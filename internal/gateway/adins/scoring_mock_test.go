@@ -18,7 +18,7 @@ func TestMockScoringGateway_Example(t *testing.T) {
 		Features: map[string]float64{
 			"ketepatan_bayar":         0.95,
 			"rasio_simpanan_pinjaman": 0.6,
-			"lama_keanggotaan_bulan":  28,
+			"lama_keanggotaan_hari":  840,
 			"konsistensi_simpanan":    0.9,
 			"rasio_beban_angsuran":    0.3,
 		},
@@ -48,7 +48,7 @@ func TestMockScoringGateway_GradeD(t *testing.T) {
 		Features: map[string]float64{
 			"ketepatan_bayar":         0.2,
 			"rasio_simpanan_pinjaman": 0.05,
-			"lama_keanggotaan_bulan":  1,
+			"lama_keanggotaan_hari":  30,
 			"konsistensi_simpanan":    0.1,
 			"rasio_beban_angsuran":    0.95,
 		},
