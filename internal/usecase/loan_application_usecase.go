@@ -75,18 +75,24 @@ func (u *loanApplicationUsecase) buildAndScore(ctx context.Context, coopID, memb
 	totalSimpanan, _ := u.appRepo.GetTotalSavings(ctx, memberID)
 	ketepatan, _ := u.appRepo.GetKetepatanBayar(ctx, memberID)
 	konsistensi, _ := u.appRepo.GetKonsistensiSimpanan(ctx, memberID, member.JoinedAt)
+	hasPrior, _ := u.appRepo.HasPriorLoans(ctx, memberID)
 
 	lamaHari := int(time.Since(member.JoinedAt).Hours() / 24)
 	angsuranPerBulan := int64(math.Round(float64(amount)*rate/100)) + amount/int64(tenor)
 	kapasitas := float64(totalSimpanan)/12 + 1
 	beban := math.Min(float64(angsuranPerBulan)/kapasitas, 1.0)
 
+	noPrior := 0.0
+	if !hasPrior {
+		noPrior = 1.0
+	}
 	features := map[string]float64{
 		"ketepatan_bayar":         ketepatan,
 		"rasio_simpanan_pinjaman": math.Min(float64(totalSimpanan)/float64(amount), 1.0),
 		"lama_keanggotaan_hari":   float64(lamaHari),
 		"konsistensi_simpanan":    konsistensi,
 		"rasio_beban_angsuran":    beban,
+		"no_prior_loans":          noPrior,
 	}
 
 	result, err := u.scoring.Score(ctx, adins.ScoringInput{

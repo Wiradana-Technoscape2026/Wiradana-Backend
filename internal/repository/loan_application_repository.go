@@ -28,6 +28,7 @@ type LoanApplicationRepository interface {
 	GetTotalSavings(ctx context.Context, memberID string) (int64, error)
 	GetKetepatanBayar(ctx context.Context, memberID string) (float64, error)
 	GetKonsistensiSimpanan(ctx context.Context, memberID string, joinedAt time.Time) (float64, error)
+	HasPriorLoans(ctx context.Context, memberID string) (bool, error)
 }
 
 type loanApplicationRepository struct{ db *gorm.DB }
@@ -160,6 +161,15 @@ func (r *loanApplicationRepository) GetKetepatanBayar(ctx context.Context, membe
 		return 1.0, nil
 	}
 	return float64(totalLunas) / float64(totalDue), nil
+}
+
+func (r *loanApplicationRepository) HasPriorLoans(ctx context.Context, memberID string) (bool, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Raw(`
+		SELECT COUNT(*) FROM installment_schedule i
+		JOIN loan l ON l.id = i.loan_id
+		WHERE l.member_id = ?`, memberID).Scan(&count).Error
+	return count > 0, err
 }
 
 func (r *loanApplicationRepository) GetKonsistensiSimpanan(ctx context.Context, memberID string, joinedAt time.Time) (float64, error) {
