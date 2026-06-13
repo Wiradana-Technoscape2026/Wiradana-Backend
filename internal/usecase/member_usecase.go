@@ -97,28 +97,40 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 			return nil, err
 		}
 		memberID := member.ID
-		// NIK disimpan di kolom email sebagai identifier login anggota.
-		// Login: POST /auth/login { "identifier": "<NIK>", "password": "..." }
-		appUser := &entity.AppUser{
-			CooperativeID: coopUUID,
-			MemberID:      &memberID,
-			Email:         member.NIK,
-			PasswordHash:  string(hash),
-			Role:          "anggota",
-		}
-		if err := u.userRepo.Create(ctx, appUser); err != nil {
-			if isDuplicateEmail(err) {
-				return nil, ErrAccountExists
-			}
-			return nil, err
-		}
 
-		membership := &entity.UserCooperativeMembership{
-			UserID:        appUser.ID,
-			CooperativeID: coopUUID,
-			MemberID:      &memberID,
+		// NIK disimpan di kolom email sebagai identifier login anggota.
+		// Satu NIK → satu AppUser global; multi-koperasi ditangani via membership.
+		existingUser, err := u.userRepo.FindByEmail(ctx, member.NIK)
+		if err == nil {
+			// AppUser sudah ada (anggota terdaftar di koperasi lain) — cukup tambah membership.
+			membership := &entity.UserCooperativeMembership{
+				UserID:        existingUser.ID,
+				CooperativeID: coopUUID,
+				MemberID:      &memberID,
+			}
+			_ = u.userRepo.CreateMembership(ctx, membership)
+		} else {
+			// AppUser belum ada — buat baru + membership.
+			appUser := &entity.AppUser{
+				CooperativeID: coopUUID,
+				MemberID:      &memberID,
+				Email:         member.NIK,
+				PasswordHash:  string(hash),
+				Role:          "anggota",
+			}
+			if err := u.userRepo.Create(ctx, appUser); err != nil {
+				if isDuplicateEmail(err) {
+					return nil, ErrAccountExists
+				}
+				return nil, err
+			}
+			membership := &entity.UserCooperativeMembership{
+				UserID:        appUser.ID,
+				CooperativeID: coopUUID,
+				MemberID:      &memberID,
+			}
+			_ = u.userRepo.CreateMembership(ctx, membership)
 		}
-		_ = u.userRepo.CreateMembership(ctx, membership) // best-effort
 	}
 
 	summary, _ := u.memberRepo.GetSavingsSummary(ctx, member.ID.String())
