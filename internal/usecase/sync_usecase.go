@@ -25,6 +25,7 @@ type syncUsecase struct {
 	loanAppUC     LoanApplicationUsecase
 	installmentUC InstallmentUsecase
 	loanConfigUC  LoanConfigUsecase
+	inventoryUC   InventoryUsecase
 }
 
 func NewSyncUsecase(
@@ -34,6 +35,7 @@ func NewSyncUsecase(
 	loanAppUC LoanApplicationUsecase,
 	installmentUC InstallmentUsecase,
 	loanConfigUC LoanConfigUsecase,
+	inventoryUC InventoryUsecase,
 ) SyncUsecase {
 	return &syncUsecase{
 		syncRepo:      syncRepo,
@@ -42,6 +44,7 @@ func NewSyncUsecase(
 		loanAppUC:     loanAppUC,
 		installmentUC: installmentUC,
 		loanConfigUC:  loanConfigUC,
+		inventoryUC:   inventoryUC,
 	}
 }
 
@@ -152,6 +155,12 @@ func (u *syncUsecase) dispatchMutation(ctx context.Context, coopID, userID strin
 		return u.dispatchCreatePayment(ctx, mut.Payload)
 	case "update_loan_config":
 		return u.dispatchUpdateLoanConfig(ctx, coopID, mut.Payload)
+	case "create_inventory_product":
+		return u.dispatchCreateInventoryProduct(ctx, coopID, mut.Payload)
+	case "update_inventory_product":
+		return u.dispatchUpdateInventoryProduct(ctx, coopID, mut.Payload)
+	case "record_inventory_movement":
+		return u.dispatchRecordInventoryMovement(ctx, coopID, mut.Payload)
 	default:
 		return "", fmt.Errorf("unknown mutation type: %s", mut.Type)
 	}
@@ -259,6 +268,50 @@ func (u *syncUsecase) dispatchUpdateLoanConfig(ctx context.Context, coopID strin
 		return "", fmt.Errorf("invalid payload: %w", err)
 	}
 	resp, err := u.loanConfigUC.Update(ctx, coopID, &req)
+	if err != nil {
+		return "", err
+	}
+	return resp.ID, nil
+}
+
+func (u *syncUsecase) dispatchCreateInventoryProduct(ctx context.Context, coopID string, payload map[string]interface{}) (string, error) {
+	var req model.CreateInventoryProductRequest
+	if err := remarshal(payload, &req); err != nil {
+		return "", fmt.Errorf("invalid payload: %w", err)
+	}
+	resp, err := u.inventoryUC.CreateProduct(ctx, coopID, &req)
+	if err != nil {
+		return "", err
+	}
+	return resp.ID, nil
+}
+
+func (u *syncUsecase) dispatchUpdateInventoryProduct(ctx context.Context, coopID string, payload map[string]interface{}) (string, error) {
+	productID, ok := strField(payload, "product_id")
+	if !ok {
+		return "", errors.New("product_id diperlukan")
+	}
+	var req model.UpdateInventoryProductRequest
+	if err := remarshal(payload, &req); err != nil {
+		return "", fmt.Errorf("invalid payload: %w", err)
+	}
+	resp, err := u.inventoryUC.UpdateProduct(ctx, coopID, productID, &req)
+	if err != nil {
+		return "", err
+	}
+	return resp.ID, nil
+}
+
+func (u *syncUsecase) dispatchRecordInventoryMovement(ctx context.Context, coopID string, payload map[string]interface{}) (string, error) {
+	productID, ok := strField(payload, "product_id")
+	if !ok {
+		return "", errors.New("product_id diperlukan")
+	}
+	var req model.CreateInventoryMovementRequest
+	if err := remarshal(payload, &req); err != nil {
+		return "", fmt.Errorf("invalid payload: %w", err)
+	}
+	resp, err := u.inventoryUC.RecordMovement(ctx, coopID, productID, &req)
 	if err != nil {
 		return "", err
 	}
