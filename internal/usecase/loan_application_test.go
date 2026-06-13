@@ -48,6 +48,9 @@ func (m *loanAppRepoMock) GetKetepatanBayar(_ context.Context, _ string) (float6
 func (m *loanAppRepoMock) GetKonsistensiSimpanan(_ context.Context, _ string, _ time.Time) (float64, error) {
 	return 0.8, nil
 }
+func (m *loanAppRepoMock) HasPriorLoans(_ context.Context, _ string) (bool, error) {
+	return false, nil
+}
 
 // ── mock LoanConfigRepository ──────────────────────────────────────────────
 

@@ -55,7 +55,9 @@ func limitFromGrade(grade string, totalSimpanan, maxPlafond int64) int64 {
 
 func generateReasons(f map[string]float64) []string {
 	var reasons []string
-	if f["ketepatan_bayar"] >= 0.9 {
+	if f["no_prior_loans"] == 1.0 {
+		reasons = append(reasons, "belum ada riwayat pinjaman sebelumnya")
+	} else if f["ketepatan_bayar"] >= 0.9 {
 		reasons = append(reasons, "riwayat pembayaran sangat baik")
 	} else if f["ketepatan_bayar"] < 0.6 {
 		reasons = append(reasons, "riwayat pembayaran perlu diperhatikan")
