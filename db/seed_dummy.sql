@@ -53,23 +53,23 @@ VALUES
    '3302020202020002', 'Agus Pratama', 'Jl. Teratai No. 14, Bogor', '081345678902', '1991-09-28', 'aktif', '{}'::jsonb, NOW() - INTERVAL '6 months');
 
 INSERT INTO app_user (
-  id, cooperative_id, member_id, email, password_hash, role
+  id, cooperative_id, member_id, email, password_hash, role, full_name
 )
 VALUES
   ('99999999-9999-9999-9999-999999999991', '11111111-1111-1111-1111-111111111111',
-   NULL, 'pengurus@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus'),
+   NULL, 'pengurus@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus', 'Ahmad Fauzi'),
   ('99999999-9999-9999-9999-999999999992', '11111111-1111-1111-1111-111111111111',
-   'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'budi@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
+   'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'budi@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota', NULL),
   ('99999999-9999-9999-9999-999999999993', '11111111-1111-1111-1111-111111111111',
-   'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'siti@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
+   'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'siti@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota', NULL),
   ('99999999-9999-9999-9999-999999999994', '22222222-2222-2222-2222-222222222222',
-   NULL, 'pengurus@sawargi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus'),
+   NULL, 'pengurus@sawargi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus', 'Bambang Wijaya'),
   ('99999999-9999-9999-9999-999999999995', '22222222-2222-2222-2222-222222222222',
-   'dddddddd-dddd-dddd-dddd-dddddddddddd', 'rina@sawargi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
+   'dddddddd-dddd-dddd-dddd-dddddddddddd', 'rina@sawargi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota', NULL),
   ('99999999-9999-9999-9999-999999999996', '11111111-1111-1111-1111-111111111111',
-   'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4', 'asep@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
+   'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4', 'asep@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota', NULL),
   ('99999999-9999-9999-9999-999999999997', '11111111-1111-1111-1111-111111111111',
-   'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', 'sri@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota');
+   'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', 'sri@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota', NULL);
 
 INSERT INTO loan_config (id, cooperative_id, flat_rate_monthly, max_plafond, penalty_daily)
 VALUES

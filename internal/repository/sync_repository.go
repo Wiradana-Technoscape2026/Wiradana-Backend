@@ -120,7 +120,7 @@ func (r *syncRepository) PullDelta(ctx context.Context, coopID uuid.UUID, since 
 			assessmentMap := r.fetchAssessmentMap(ctx, appIDs)
 			for _, a := range apps {
 				resp.LoanApplications = append(resp.LoanApplications,
-					converter.ToLoanApplicationResponse(&a, memberNameMap[a.MemberID], assessmentMap[a.ID]))
+					converter.ToLoanApplicationResponse(&a, memberNameMap[a.MemberID], nil, assessmentMap[a.ID]))
 			}
 		}
 	}

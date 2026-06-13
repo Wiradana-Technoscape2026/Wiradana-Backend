@@ -11,6 +11,7 @@ import (
 type SavingsRepository interface {
 	Create(ctx context.Context, tx *entity.SavingsTransaction) error
 	FindByMember(ctx context.Context, cooperativeID, memberID string) ([]*entity.SavingsTransaction, error)
+	FindByMemberWithRecorder(ctx context.Context, cooperativeID, memberID string) ([]*SavingsTxWithMemberRow, error)
 	CountPokok(ctx context.Context, memberID, cooperativeID string) (int64, error)
 	GetSukarelaBalance(ctx context.Context, memberID, cooperativeID string) (int64, error)
 	GetCoopSummary(ctx context.Context, cooperativeID string) (*CoopSavingsSummaryRow, error)
@@ -24,13 +25,14 @@ type CoopSavingsSummaryRow struct {
 }
 
 type SavingsTxWithMemberRow struct {
-	ID          string    `gorm:"column:id"`
-	MemberID    string    `gorm:"column:member_id"`
-	MemberName  string    `gorm:"column:member_name"`
-	SavingsType string    `gorm:"column:savings_type"`
-	Direction   string    `gorm:"column:direction"`
-	Amount      int64     `gorm:"column:amount"`
-	CreatedAt   time.Time `gorm:"column:created_at"`
+	ID             string    `gorm:"column:id"`
+	MemberID       string    `gorm:"column:member_id"`
+	MemberName     string    `gorm:"column:member_name"`
+	SavingsType    string    `gorm:"column:savings_type"`
+	Direction      string    `gorm:"column:direction"`
+	Amount         int64     `gorm:"column:amount"`
+	RecordedByName *string   `gorm:"column:recorded_by_name"`
+	CreatedAt      time.Time `gorm:"column:created_at"`
 }
 
 type savingsRepository struct {
@@ -52,6 +54,22 @@ func (r *savingsRepository) FindByMember(ctx context.Context, cooperativeID, mem
 		Order("created_at DESC").
 		Find(&txs).Error
 	return txs, err
+}
+
+// FindByMemberWithRecorder — seperti FindByMember tapi JOIN app_user untuk nama pencatat.
+func (r *savingsRepository) FindByMemberWithRecorder(ctx context.Context, cooperativeID, memberID string) ([]*SavingsTxWithMemberRow, error) {
+	var rows []*SavingsTxWithMemberRow
+	err := r.db.WithContext(ctx).Raw(`
+		SELECT st.id, st.member_id, m.full_name AS member_name,
+		       st.savings_type, st.direction, st.amount, st.created_at,
+		       au.full_name AS recorded_by_name
+		FROM savings_transaction st
+		JOIN member m ON m.id = st.member_id
+		LEFT JOIN app_user au ON au.id = st.recorded_by
+		WHERE st.cooperative_id = ? AND st.member_id = ?
+		ORDER BY st.created_at DESC
+	`, cooperativeID, memberID).Scan(&rows).Error
+	return rows, err
 }
 
 func (r *savingsRepository) CountPokok(ctx context.Context, memberID, cooperativeID string) (int64, error) {
@@ -93,9 +111,11 @@ func (r *savingsRepository) FindAllRecent(ctx context.Context, cooperativeID, sa
 	var rows []*SavingsTxWithMemberRow
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT st.id, st.member_id, m.full_name AS member_name,
-		       st.savings_type, st.direction, st.amount, st.created_at
+		       st.savings_type, st.direction, st.amount, st.created_at,
+		       au.full_name AS recorded_by_name
 		FROM savings_transaction st
 		JOIN member m ON m.id = st.member_id
+		LEFT JOIN app_user au ON au.id = st.recorded_by
 		WHERE st.cooperative_id = ?
 		  AND (? = '' OR st.savings_type = ?)
 		  AND (? = '' OR st.direction = ?)

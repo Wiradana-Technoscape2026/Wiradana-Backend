@@ -17,9 +17,10 @@ type SelectCooperativeRequest struct {
 
 // RegisterPengurusRequest — POST /auth/register/pengurus
 type RegisterPengurusRequest struct {
-	CooperativeID string `json:"cooperative_id" validate:"required,uuid"`
-	Email         string `json:"email" validate:"required,email"`
-	Password      string `json:"password" validate:"required,min=8"`
+	CooperativeID string  `json:"cooperative_id" validate:"required,uuid"`
+	Email         string  `json:"email" validate:"required,email"`
+	Password      string  `json:"password" validate:"required,min=8"`
+	FullName      *string `json:"full_name"` // opsional
 }
 
 // AppUserResponse — api_planning §2.1
@@ -28,6 +29,7 @@ type AppUserResponse struct {
 	Email    string  `json:"email"`
 	Role     string  `json:"role"`
 	MemberID *string `json:"member_id"`
+	FullName *string `json:"full_name"`
 }
 
 // CooperativeOption — satu entry koperasi dalam daftar pilihan saat anggota punya lebih dari satu.

@@ -44,7 +44,7 @@ func ToCreditAssessmentResponse(ca *entity.CreditAssessment) *model.CreditAssess
 	}
 }
 
-func ToLoanApplicationResponse(app *entity.LoanApplication, memberName string, assessment *entity.CreditAssessment) model.LoanApplicationResponse {
+func ToLoanApplicationResponse(app *entity.LoanApplication, memberName string, approvedByName *string, assessment *entity.CreditAssessment) model.LoanApplicationResponse {
 	purpose := ""
 	if app.Purpose != nil {
 		purpose = *app.Purpose
@@ -54,17 +54,24 @@ func ToLoanApplicationResponse(app *entity.LoanApplication, memberName string, a
 		s := app.ApprovedBy.String()
 		approvedBy = &s
 	}
+	var approvedAt *string
+	if app.ApprovedAt != nil {
+		s := app.ApprovedAt.Format(time.RFC3339)
+		approvedAt = &s
+	}
 	return model.LoanApplicationResponse{
-		ID:          app.ID.String(),
-		MemberID:    app.MemberID.String(),
-		MemberName:  memberName,
-		Amount:      app.Amount,
-		TenorMonths: app.TenorMonths,
-		Purpose:     purpose,
-		Status:      app.Status,
-		ApprovedBy:  approvedBy,
-		CreatedAt:   app.CreatedAt.Format(time.RFC3339),
-		Assessment:  ToCreditAssessmentResponse(assessment),
+		ID:             app.ID.String(),
+		MemberID:       app.MemberID.String(),
+		MemberName:     memberName,
+		Amount:         app.Amount,
+		TenorMonths:    app.TenorMonths,
+		Purpose:        purpose,
+		Status:         app.Status,
+		ApprovedBy:     approvedBy,
+		ApprovedByName: approvedByName,
+		ApprovedAt:     approvedAt,
+		CreatedAt:      app.CreatedAt.Format(time.RFC3339),
+		Assessment:     ToCreditAssessmentResponse(assessment),
 	}
 }
 

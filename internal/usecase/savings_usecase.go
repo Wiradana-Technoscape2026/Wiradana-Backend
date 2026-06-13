@@ -18,8 +18,9 @@ var (
 )
 
 type SavingsUsecase interface {
-	Record(ctx context.Context, coopID, memberID string, req *model.CreateSavingsRequest) (*model.SavingsTransactionResponse, error)
+	Record(ctx context.Context, coopID, memberID, recordedByUserID string, req *model.CreateSavingsRequest) (*model.SavingsTransactionResponse, error)
 	FindByMember(ctx context.Context, coopID, memberID string) ([]model.SavingsTransactionResponse, error)
+	FindByMemberWithRecorder(ctx context.Context, coopID, memberID string) ([]model.SavingsTransactionResponse, error)
 	GetCoopSummary(ctx context.Context, coopID string) (*model.SavingsSummaryResponse, error)
 	FindAllRecent(ctx context.Context, coopID, savingsType, direction string, limit, offset int) ([]model.SavingsTransactionWithMemberResponse, int64, error)
 }
@@ -33,7 +34,7 @@ func NewSavingsUsecase(savingsRepo repository.SavingsRepository, memberRepo repo
 	return &savingsUsecase{savingsRepo: savingsRepo, memberRepo: memberRepo}
 }
 
-func (u *savingsUsecase) Record(ctx context.Context, coopID, memberID string, req *model.CreateSavingsRequest) (*model.SavingsTransactionResponse, error) {
+func (u *savingsUsecase) Record(ctx context.Context, coopID, memberID, recordedByUserID string, req *model.CreateSavingsRequest) (*model.SavingsTransactionResponse, error) {
 	if _, err := u.memberRepo.FindByID(ctx, coopID, memberID); err != nil {
 		if errors.Is(err, repository.ErrMemberNotFound) {
 			return nil, ErrMemberNotFound
@@ -80,6 +81,13 @@ func (u *savingsUsecase) Record(ctx context.Context, coopID, memberID string, re
 		Direction:     req.Direction,
 		Amount:        req.Amount,
 	}
+	// Simpan siapa yang mencatat jika user_id tersedia
+	if recordedByUserID != "" {
+		if uid, err := uuid.Parse(recordedByUserID); err == nil {
+			tx.RecordedBy = &uid
+		}
+	}
+
 	if err := u.savingsRepo.Create(ctx, tx); err != nil {
 		return nil, err
 	}
@@ -108,6 +116,27 @@ func (u *savingsUsecase) FindByMember(ctx context.Context, coopID, memberID stri
 	return responses, nil
 }
 
+// FindByMemberWithRecorder — dipakai oleh portal anggota untuk tampilkan nama pencatat.
+func (u *savingsUsecase) FindByMemberWithRecorder(ctx context.Context, coopID, memberID string) ([]model.SavingsTransactionResponse, error) {
+	rows, err := u.savingsRepo.FindByMemberWithRecorder(ctx, coopID, memberID)
+	if err != nil {
+		return nil, err
+	}
+	responses := make([]model.SavingsTransactionResponse, 0, len(rows))
+	for _, r := range rows {
+		responses = append(responses, model.SavingsTransactionResponse{
+			ID:             r.ID,
+			MemberID:       r.MemberID,
+			SavingsType:    r.SavingsType,
+			Direction:      r.Direction,
+			Amount:         r.Amount,
+			RecordedByName: r.RecordedByName,
+			CreatedAt:      r.CreatedAt,
+		})
+	}
+	return responses, nil
+}
+
 func (u *savingsUsecase) GetCoopSummary(ctx context.Context, coopID string) (*model.SavingsSummaryResponse, error) {
 	row, err := u.savingsRepo.GetCoopSummary(ctx, coopID)
 	if err != nil {
@@ -130,13 +159,14 @@ func (u *savingsUsecase) FindAllRecent(ctx context.Context, coopID, savingsType,
 	responses := make([]model.SavingsTransactionWithMemberResponse, 0, len(rows))
 	for _, r := range rows {
 		responses = append(responses, model.SavingsTransactionWithMemberResponse{
-			ID:          r.ID,
-			MemberID:    r.MemberID,
-			MemberName:  r.MemberName,
-			SavingsType: r.SavingsType,
-			Direction:   r.Direction,
-			Amount:      r.Amount,
-			CreatedAt:   r.CreatedAt,
+			ID:             r.ID,
+			MemberID:       r.MemberID,
+			MemberName:     r.MemberName,
+			SavingsType:    r.SavingsType,
+			Direction:      r.Direction,
+			Amount:         r.Amount,
+			RecordedByName: r.RecordedByName,
+			CreatedAt:      r.CreatedAt,
 		})
 	}
 	return responses, total, nil

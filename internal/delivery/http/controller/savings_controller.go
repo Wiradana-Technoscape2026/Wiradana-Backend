@@ -37,6 +37,7 @@ func (ctrl *SavingsController) List(c *fiber.Ctx) error {
 
 func (ctrl *SavingsController) Record(c *fiber.Ctx) error {
 	coopID := c.Locals("cooperative_id").(string)
+	userID := c.Locals("user_id").(string)
 	memberID := c.Params("id")
 
 	var req model.CreateSavingsRequest
@@ -47,7 +48,7 @@ func (ctrl *SavingsController) Record(c *fiber.Ctx) error {
 		return Fail(c, fiber.StatusBadRequest, "VALIDATION_ERROR", err.Error())
 	}
 
-	tx, err := ctrl.savingsUC.Record(c.Context(), coopID, memberID, &req)
+	tx, err := ctrl.savingsUC.Record(c.Context(), coopID, memberID, userID, &req)
 	if err != nil {
 		switch {
 		case errors.Is(err, usecase.ErrMemberNotFound):

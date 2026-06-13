@@ -144,6 +144,7 @@ func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterP
 		Email:         req.Email,
 		PasswordHash:  string(hashedPassword),
 		Role:          "pengurus",
+		FullName:      req.FullName,
 	}
 
 	if err := u.userRepo.Create(ctx, user); err != nil {
