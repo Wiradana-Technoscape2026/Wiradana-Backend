@@ -39,7 +39,7 @@ func (ctrl *PortalController) Me(c *fiber.Ctx) error {
 		return Fail(c, fiber.StatusNotFound, "NOT_FOUND", "anggota tidak ditemukan")
 	}
 
-	recentTxs, _ := ctrl.savingsUC.FindByMember(c.Context(), coopID, memberID)
+	recentTxs, _ := ctrl.savingsUC.FindByMemberWithRecorder(c.Context(), coopID, memberID)
 	if recentTxs == nil {
 		recentTxs = []model.SavingsTransactionResponse{}
 	}

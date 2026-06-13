@@ -66,9 +66,22 @@ func (u *authUsecase) Login(ctx context.Context, identifier, password string) (*
 		return nil, err
 	}
 
-	// Anggota dengan lebih dari satu koperasi harus memilih koperasi terlebih dahulu.
+	// Anggota dengan lebih dari satu koperasi: tetap issue token (scoped ke koperasi pertama),
+	// dan sertakan daftar koperasi agar FE bisa prompt user untuk switch.
 	if len(memberships) > 1 {
-		return &LoginResult{User: user, Memberships: memberships}, nil
+		m := memberships[0]
+		coopID, _ := uuid.Parse(m.CooperativeID)
+		user.CooperativeID = coopID
+		if m.MemberID != "" {
+			mid, _ := uuid.Parse(m.MemberID)
+			user.MemberID = &mid
+		}
+		result, err := u.buildLoginResult(user)
+		if err != nil {
+			return nil, err
+		}
+		result.Memberships = memberships
+		return result, nil
 	}
 
 	// Single membership: gunakan data dari tabel membership jika ada.
@@ -131,6 +144,7 @@ func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterP
 		Email:         req.Email,
 		PasswordHash:  string(hashedPassword),
 		Role:          "pengurus",
+		FullName:      req.FullName,
 	}
 
 	if err := u.userRepo.Create(ctx, user); err != nil {

@@ -12,6 +12,7 @@ type AppUser struct {
 	Email         string     `gorm:"not null" json:"email"`
 	PasswordHash  string     `gorm:"not null" json:"-"`
 	Role          string     `gorm:"not null" json:"role"`
+	FullName      *string    `gorm:"column:full_name" json:"full_name"`
 }
 
 func (u *AppUser) BeforeCreate(_ *gorm.DB) error {

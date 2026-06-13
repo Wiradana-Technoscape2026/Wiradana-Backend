@@ -7,9 +7,10 @@ import (
 
 func ToAppUserResponse(user *entity.AppUser) model.AppUserResponse {
 	resp := model.AppUserResponse{
-		ID:    user.ID.String(),
-		Email: user.Email,
-		Role:  user.Role,
+		ID:       user.ID.String(),
+		Email:    user.Email,
+		Role:     user.Role,
+		FullName: user.FullName,
 	}
 	if user.MemberID != nil {
 		s := user.MemberID.String()
