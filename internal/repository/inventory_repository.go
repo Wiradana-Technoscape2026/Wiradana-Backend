@@ -35,7 +35,7 @@ type InventoryRepository interface {
 
 	// Movements (INSERT-ONLY)
 	CreateMovement(ctx context.Context, m *entity.InventoryMovement) error
-	GetStock(ctx context.Context, productID string) (int64, error)
+	GetStock(ctx context.Context, productID string) (float64, error)
 }
 
 type inventoryRepository struct {
@@ -145,8 +145,8 @@ func (r *inventoryRepository) CreateMovement(ctx context.Context, m *entity.Inve
 	return r.db.WithContext(ctx).Create(m).Error
 }
 
-func (r *inventoryRepository) GetStock(ctx context.Context, productID string) (int64, error) {
-	var stock int64
+func (r *inventoryRepository) GetStock(ctx context.Context, productID string) (float64, error) {
+	var stock float64
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT
 			COALESCE(SUM(quantity) FILTER (WHERE direction = 'masuk'), 0)

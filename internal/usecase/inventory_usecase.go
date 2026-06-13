@@ -223,8 +223,11 @@ func (u *inventoryUsecase) RecordMovement(ctx context.Context, coopID, productID
 
 	// Guard: stock check for "keluar"
 	if req.Direction == "keluar" {
-		currentStock, _ := u.repo.GetStock(ctx, productID)
-		if int64(req.Quantity) > currentStock {
+		currentStock, err := u.repo.GetStock(ctx, productID)
+		if err != nil {
+			return nil, err
+		}
+		if req.Quantity > currentStock {
 			return nil, ErrStockInsufficient
 		}
 	}
