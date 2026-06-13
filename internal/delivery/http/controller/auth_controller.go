@@ -48,6 +48,7 @@ func (ctrl *AuthController) Login(c *fiber.Ctx) error {
 		}
 		user := converter.ToAppUserResponse(result.User)
 		return OK(c, model.LoginResponse{
+			Token:                        result.Token,
 			RequiresCooperativeSelection: true,
 			User:                         &user,
 			Cooperatives:                 opts,
