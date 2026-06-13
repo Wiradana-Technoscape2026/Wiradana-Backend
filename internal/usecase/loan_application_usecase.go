@@ -132,13 +132,13 @@ func (u *loanApplicationUsecase) Create(ctx context.Context, coopID string, req 
 		return nil, err
 	}
 
-	// Re-fetch to get member name
+	// Re-fetch to get member name and approver name
 	meta, err2 := u.appRepo.FindByID(ctx, coopID, app.ID.String())
 	if err2 == nil {
-		resp := converter.ToLoanApplicationResponse(&meta.LoanApplication, meta.MemberName, meta.Assessment)
+		resp := converter.ToLoanApplicationResponse(&meta.LoanApplication, meta.MemberName, meta.ApprovedByName, meta.Assessment)
 		return &resp, nil
 	}
-	resp := converter.ToLoanApplicationResponse(app, req.MemberID, ca)
+	resp := converter.ToLoanApplicationResponse(app, req.MemberID, nil, ca)
 	return &resp, nil
 }
 
@@ -156,7 +156,7 @@ func (u *loanApplicationUsecase) List(ctx context.Context, coopID, status string
 	}
 	result := make([]model.LoanApplicationResponse, len(apps))
 	for i, a := range apps {
-		result[i] = converter.ToLoanApplicationResponse(&a.LoanApplication, a.MemberName, a.Assessment)
+		result[i] = converter.ToLoanApplicationResponse(&a.LoanApplication, a.MemberName, a.ApprovedByName, a.Assessment)
 	}
 	return result, nil
 }
@@ -168,7 +168,7 @@ func (u *loanApplicationUsecase) ListForMember(ctx context.Context, memberID str
 	}
 	result := make([]model.LoanApplicationResponse, len(apps))
 	for i, a := range apps {
-		result[i] = converter.ToLoanApplicationResponse(&a.LoanApplication, a.MemberName, a.Assessment)
+		result[i] = converter.ToLoanApplicationResponse(&a.LoanApplication, a.MemberName, a.ApprovedByName, a.Assessment)
 	}
 	return result, nil
 }
@@ -229,7 +229,7 @@ func (u *loanApplicationUsecase) Approve(ctx context.Context, coopID, appID, app
 
 	var appResp model.LoanApplicationResponse
 	if updatedApp != nil {
-		appResp = converter.ToLoanApplicationResponse(&updatedApp.LoanApplication, updatedApp.MemberName, updatedApp.Assessment)
+		appResp = converter.ToLoanApplicationResponse(&updatedApp.LoanApplication, updatedApp.MemberName, updatedApp.ApprovedByName, updatedApp.Assessment)
 	}
 
 	var loanResp model.LoanResponse
@@ -255,6 +255,6 @@ func (u *loanApplicationUsecase) Reject(ctx context.Context, coopID, appID strin
 		return nil, err
 	}
 	meta.Status = "rejected"
-	resp := converter.ToLoanApplicationResponse(&meta.LoanApplication, meta.MemberName, meta.Assessment)
+	resp := converter.ToLoanApplicationResponse(&meta.LoanApplication, meta.MemberName, meta.ApprovedByName, meta.Assessment)
 	return &resp, nil
 }

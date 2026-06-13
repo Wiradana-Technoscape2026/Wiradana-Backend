@@ -69,10 +69,13 @@ func (s *stubMemberUC) Update(_ context.Context, _, _ string, _ *model.UpdateMem
 
 type stubSavingsUC struct{}
 
-func (s *stubSavingsUC) Record(_ context.Context, _, _ string, _ *model.CreateSavingsRequest) (*model.SavingsTransactionResponse, error) {
+func (s *stubSavingsUC) Record(_ context.Context, _, _, _ string, _ *model.CreateSavingsRequest) (*model.SavingsTransactionResponse, error) {
 	return nil, errors.New("stub error")
 }
 func (s *stubSavingsUC) FindByMember(_ context.Context, _, _ string) ([]model.SavingsTransactionResponse, error) {
+	return nil, nil
+}
+func (s *stubSavingsUC) FindByMemberWithRecorder(_ context.Context, _, _ string) ([]model.SavingsTransactionResponse, error) {
 	return nil, nil
 }
 func (s *stubSavingsUC) GetCoopSummary(_ context.Context, _ string) (*model.SavingsSummaryResponse, error) {

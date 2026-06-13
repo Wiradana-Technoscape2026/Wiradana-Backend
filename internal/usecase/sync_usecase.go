@@ -203,7 +203,7 @@ func (u *syncUsecase) dispatchCreateSavings(ctx context.Context, coopID string, 
 	if err := remarshal(payload, &req); err != nil {
 		return "", fmt.Errorf("invalid payload: %w", err)
 	}
-	resp, err := u.savingsUC.Record(ctx, coopID, memberID, &req)
+	resp, err := u.savingsUC.Record(ctx, coopID, memberID, "", &req)
 	if err != nil {
 		return "", err
 	}

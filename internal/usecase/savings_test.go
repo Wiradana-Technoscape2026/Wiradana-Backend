@@ -23,6 +23,9 @@ func (m *mockSavingsRepo) Create(_ context.Context, _ *entity.SavingsTransaction
 func (m *mockSavingsRepo) FindByMember(_ context.Context, _, _ string) ([]*entity.SavingsTransaction, error) {
 	return nil, nil
 }
+func (m *mockSavingsRepo) FindByMemberWithRecorder(_ context.Context, _, _ string) ([]*repository.SavingsTxWithMemberRow, error) {
+	return nil, nil
+}
 func (m *mockSavingsRepo) CountPokok(_ context.Context, _, _ string) (int64, error) {
 	return m.pokokCount, nil
 }
@@ -74,7 +77,7 @@ const (
 func TestSavings_PokokDuplicate_Returns409Error(t *testing.T) {
 	// CountPokok returns 1 (already recorded) → ErrPokokAlreadyRecorded
 	uc := newSavingsUC(1, 0)
-	_, err := uc.Record(context.Background(), testCoopID, testMemberID, &model.CreateSavingsRequest{
+	_, err := uc.Record(context.Background(), testCoopID, testMemberID, "", &model.CreateSavingsRequest{
 		SavingsType: "pokok",
 		Direction:   "setor",
 		Amount:      500_000,
@@ -86,7 +89,7 @@ func TestSavings_PokokDuplicate_Returns409Error(t *testing.T) {
 
 func TestSavings_TarikWajib_Returns409Error(t *testing.T) {
 	uc := newSavingsUC(0, 0)
-	_, err := uc.Record(context.Background(), testCoopID, testMemberID, &model.CreateSavingsRequest{
+	_, err := uc.Record(context.Background(), testCoopID, testMemberID, "", &model.CreateSavingsRequest{
 		SavingsType: "wajib",
 		Direction:   "tarik",
 		Amount:      100_000,
@@ -98,7 +101,7 @@ func TestSavings_TarikWajib_Returns409Error(t *testing.T) {
 
 func TestSavings_TarikPokok_Returns409Error(t *testing.T) {
 	uc := newSavingsUC(0, 0)
-	_, err := uc.Record(context.Background(), testCoopID, testMemberID, &model.CreateSavingsRequest{
+	_, err := uc.Record(context.Background(), testCoopID, testMemberID, "", &model.CreateSavingsRequest{
 		SavingsType: "pokok",
 		Direction:   "tarik",
 		Amount:      500_000,
@@ -111,7 +114,7 @@ func TestSavings_TarikPokok_Returns409Error(t *testing.T) {
 func TestSavings_TarikSukarela_InsufficientBalance(t *testing.T) {
 	// balance = 50_000, tarik 100_000 → ErrInsufficientBalance
 	uc := newSavingsUC(0, 50_000)
-	_, err := uc.Record(context.Background(), testCoopID, testMemberID, &model.CreateSavingsRequest{
+	_, err := uc.Record(context.Background(), testCoopID, testMemberID, "", &model.CreateSavingsRequest{
 		SavingsType: "sukarela",
 		Direction:   "tarik",
 		Amount:      100_000,
@@ -123,7 +126,7 @@ func TestSavings_TarikSukarela_InsufficientBalance(t *testing.T) {
 
 func TestSavings_Setor_OK(t *testing.T) {
 	uc := newSavingsUC(0, 0)
-	resp, err := uc.Record(context.Background(), testCoopID, testMemberID, &model.CreateSavingsRequest{
+	resp, err := uc.Record(context.Background(), testCoopID, testMemberID, "", &model.CreateSavingsRequest{
 		SavingsType: "wajib",
 		Direction:   "setor",
 		Amount:      150_000,

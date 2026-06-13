@@ -49,16 +49,18 @@ type RejectLoanApplicationRequest struct {
 }
 
 type LoanApplicationResponse struct {
-	ID          string                    `json:"id"`
-	MemberID    string                    `json:"member_id"`
-	MemberName  string                    `json:"member_name"`
-	Amount      int64                     `json:"amount"`
-	TenorMonths int                       `json:"tenor_months"`
-	Purpose     string                    `json:"purpose"`
-	Status      string                    `json:"status"`
-	ApprovedBy  *string                   `json:"approved_by"`
-	CreatedAt   string                    `json:"created_at"`
-	Assessment  *CreditAssessmentResponse `json:"assessment"`
+	ID             string                    `json:"id"`
+	MemberID       string                    `json:"member_id"`
+	MemberName     string                    `json:"member_name"`
+	Amount         int64                     `json:"amount"`
+	TenorMonths    int                       `json:"tenor_months"`
+	Purpose        string                    `json:"purpose"`
+	Status         string                    `json:"status"`
+	ApprovedBy     *string                   `json:"approved_by"`
+	ApprovedByName *string                   `json:"approved_by_name"`
+	ApprovedAt     *string                   `json:"approved_at"`
+	CreatedAt      string                    `json:"created_at"`
+	Assessment     *CreditAssessmentResponse `json:"assessment"`
 }
 
 // ---- Installment ----

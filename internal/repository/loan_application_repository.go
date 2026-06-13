@@ -14,8 +14,9 @@ var ErrLoanApplicationNotFound = errors.New("pengajuan pinjaman tidak ditemukan"
 
 type LoanApplicationWithMeta struct {
 	entity.LoanApplication
-	MemberName string
-	Assessment *entity.CreditAssessment
+	MemberName     string
+	ApprovedByName *string
+	Assessment     *entity.CreditAssessment
 }
 
 type LoanApplicationRepository interface {
@@ -65,15 +66,17 @@ func (r *loanApplicationRepository) loadAssessments(ctx context.Context, apps []
 
 type appRow struct {
 	entity.LoanApplication
-	MemberName string `gorm:"column:member_name"`
+	MemberName     string  `gorm:"column:member_name"`
+	ApprovedByName *string `gorm:"column:approved_by_name"`
 }
 
 func (r *loanApplicationRepository) FindAll(ctx context.Context, coopID, status string) ([]*LoanApplicationWithMeta, error) {
 	var rows []appRow
 	q := r.db.WithContext(ctx).
 		Table("loan_application").
-		Select("loan_application.*, member.full_name as member_name").
+		Select("loan_application.*, member.full_name as member_name, au.full_name as approved_by_name").
 		Joins("JOIN member ON member.id = loan_application.member_id").
+		Joins("LEFT JOIN app_user au ON au.id = loan_application.approved_by").
 		Where("loan_application.cooperative_id = ?", coopID)
 	if status != "" {
 		q = q.Where("loan_application.status = ?", status)
@@ -83,7 +86,7 @@ func (r *loanApplicationRepository) FindAll(ctx context.Context, coopID, status 
 	}
 	result := make([]*LoanApplicationWithMeta, len(rows))
 	for i, row := range rows {
-		result[i] = &LoanApplicationWithMeta{LoanApplication: row.LoanApplication, MemberName: row.MemberName}
+		result[i] = &LoanApplicationWithMeta{LoanApplication: row.LoanApplication, MemberName: row.MemberName, ApprovedByName: row.ApprovedByName}
 	}
 	r.loadAssessments(ctx, result)
 	return result, nil
@@ -93,8 +96,9 @@ func (r *loanApplicationRepository) FindAllByMember(ctx context.Context, memberI
 	var rows []appRow
 	if err := r.db.WithContext(ctx).
 		Table("loan_application").
-		Select("loan_application.*, member.full_name as member_name").
+		Select("loan_application.*, member.full_name as member_name, au.full_name as approved_by_name").
 		Joins("JOIN member ON member.id = loan_application.member_id").
+		Joins("LEFT JOIN app_user au ON au.id = loan_application.approved_by").
 		Where("loan_application.member_id = ?", memberID).
 		Order("loan_application.created_at DESC").
 		Scan(&rows).Error; err != nil {
@@ -102,7 +106,7 @@ func (r *loanApplicationRepository) FindAllByMember(ctx context.Context, memberI
 	}
 	result := make([]*LoanApplicationWithMeta, len(rows))
 	for i, row := range rows {
-		result[i] = &LoanApplicationWithMeta{LoanApplication: row.LoanApplication, MemberName: row.MemberName}
+		result[i] = &LoanApplicationWithMeta{LoanApplication: row.LoanApplication, MemberName: row.MemberName, ApprovedByName: row.ApprovedByName}
 	}
 	r.loadAssessments(ctx, result)
 	return result, nil
@@ -112,8 +116,9 @@ func (r *loanApplicationRepository) FindByID(ctx context.Context, coopID, appID 
 	var row appRow
 	q := r.db.WithContext(ctx).
 		Table("loan_application").
-		Select("loan_application.*, member.full_name as member_name").
+		Select("loan_application.*, member.full_name as member_name, au.full_name as approved_by_name").
 		Joins("JOIN member ON member.id = loan_application.member_id").
+		Joins("LEFT JOIN app_user au ON au.id = loan_application.approved_by").
 		Where("loan_application.id = ?", appID)
 	if coopID != "" {
 		q = q.Where("loan_application.cooperative_id = ?", coopID)
@@ -124,7 +129,7 @@ func (r *loanApplicationRepository) FindByID(ctx context.Context, coopID, appID 
 	if row.ID == uuid.Nil {
 		return nil, ErrLoanApplicationNotFound
 	}
-	meta := &LoanApplicationWithMeta{LoanApplication: row.LoanApplication, MemberName: row.MemberName}
+	meta := &LoanApplicationWithMeta{LoanApplication: row.LoanApplication, MemberName: row.MemberName, ApprovedByName: row.ApprovedByName}
 	r.loadAssessments(ctx, []*LoanApplicationWithMeta{meta})
 	return meta, nil
 }
@@ -133,6 +138,8 @@ func (r *loanApplicationRepository) UpdateStatus(ctx context.Context, appID, sta
 	updates := map[string]interface{}{"status": status}
 	if approvedBy != nil {
 		updates["approved_by"] = approvedBy
+		now := time.Now()
+		updates["approved_at"] = &now
 	}
 	return r.db.WithContext(ctx).Model(&entity.LoanApplication{}).
 		Where("id = ?", appID).Updates(updates).Error
