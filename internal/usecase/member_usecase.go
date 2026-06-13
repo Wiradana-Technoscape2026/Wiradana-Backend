@@ -95,6 +95,13 @@ func (u *memberUsecase) Create(ctx context.Context, cooperativeID string, req *m
 			}
 			return nil, err
 		}
+
+		membership := &entity.UserCooperativeMembership{
+			UserID:        appUser.ID,
+			CooperativeID: coopUUID,
+			MemberID:      &memberID,
+		}
+		_ = u.userRepo.CreateMembership(ctx, membership) // best-effort
 	}
 
 	summary, _ := u.memberRepo.GetSavingsSummary(ctx, member.ID.String())
