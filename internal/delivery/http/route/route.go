@@ -36,6 +36,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	inventoryRepo := repository.NewInventoryRepository(db)
 	notifRepo := repository.NewNotificationRepository(db)
 	reportRepo := repository.NewReportRepository(db)
+	loanAuditRepo := repository.NewLoanAuditRepository(db)
 
 	// ── Gateways ──────────────────────────────────────────────────────────────
 	var ocrGateway adins.KTPOCRGateway
@@ -60,9 +61,10 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	savingsUC := usecase.NewSavingsUsecase(savingsRepo, memberRepo)
 	ocrUC := usecase.NewOCRUsecase(ocrGateway)
 	loanConfigUC := usecase.NewLoanConfigUsecase(loanConfigRepo)
-	loanAppUC := usecase.NewLoanApplicationUsecase(loanAppRepo, loanConfigRepo, memberRepo, loanRepo, scoringGateway)
+	loanAuditUC := usecase.NewLoanAuditUsecase(loanAuditRepo, loanRepo)
+	loanAppUC := usecase.NewLoanApplicationUsecase(loanAppRepo, loanConfigRepo, memberRepo, loanRepo, scoringGateway, loanAuditRepo)
 	loanUC := usecase.NewLoanUsecase(loanRepo)
-	installmentUC := usecase.NewInstallmentUsecase(installmentRepo, loanRepo)
+	installmentUC := usecase.NewInstallmentUsecase(installmentRepo, loanRepo, loanAuditRepo)
 	dashboardUC := usecase.NewDashboardUsecase(dashboardRepo)
 	shuUC := usecase.NewShuUsecase(shuRepo)
 	moduleUC := usecase.NewModuleUsecase(moduleRepo)
@@ -88,6 +90,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC, authUC, dashboardUC)
 	notifCtrl := controller.NewNotificationController(notifUC)
 	reportCtrl := controller.NewReportController(reportUC)
+	loanAuditCtrl := controller.NewLoanAuditController(loanAuditUC, validate)
 
 	// ── Middleware shorthands ─────────────────────────────────────────────────
 	// In Fiber v2, handlers passed to Group() are registered via app.Use(prefix),
@@ -106,6 +109,10 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	api.Post("/auth/login", authCtrl.Login)
 	api.Post("/auth/select-cooperative", authCtrl.SelectCooperative)
 	api.Post("/auth/register/pengurus", authCtrl.RegisterPengurus)
+
+	// ── Audit (Secure Scoped Links) ───────────────────────────────────────────
+	api.Get("/audit/loans", loanAuditCtrl.GetAuditDetails)
+	api.Post("/audit/loans/flag", loanAuditCtrl.FlagLog)
 
 	// ── Pengurus ──────────────────────────────────────────────────────────────
 	// Groups used only for URL prefix — no middleware in Group() to avoid global Use leak.
@@ -130,6 +137,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	pengurus.Get("/loans", p(loanCtrl.List)...)
 	pengurus.Get("/loans/:id", p(loanCtrl.GetByID)...)
 	pengurus.Get("/loans/:id/export", p(loanCtrl.ExportExcel)...)
+	pengurus.Post("/loans/:id/audit-token", p(loanAuditCtrl.CreateToken)...)
 
 	pengurus.Post("/installments/:id/pay", p(installmentCtrl.Pay)...)
 

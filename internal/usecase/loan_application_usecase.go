@@ -13,6 +13,7 @@ import (
 	"github.com/wiradana/backend/internal/model"
 	"github.com/wiradana/backend/internal/model/converter"
 	"github.com/wiradana/backend/internal/repository"
+	"gorm.io/datatypes"
 )
 
 var (
@@ -37,6 +38,7 @@ type loanApplicationUsecase struct {
 	memberRepo repository.MemberRepository
 	loanRepo   repository.LoanRepository
 	scoring    adins.ScoringGateway
+	auditRepo  repository.LoanAuditRepository
 }
 
 func NewLoanApplicationUsecase(
@@ -45,10 +47,12 @@ func NewLoanApplicationUsecase(
 	memberRepo repository.MemberRepository,
 	loanRepo repository.LoanRepository,
 	scoring adins.ScoringGateway,
+	auditRepo repository.LoanAuditRepository,
 ) LoanApplicationUsecase {
 	return &loanApplicationUsecase{
 		appRepo: appRepo, configRepo: configRepo,
 		memberRepo: memberRepo, loanRepo: loanRepo, scoring: scoring,
+		auditRepo: auditRepo,
 	}
 }
 
@@ -216,6 +220,31 @@ func (u *loanApplicationUsecase) Approve(ctx context.Context, coopID, appID, app
 	if err := u.loanRepo.Create(ctx, loan); err != nil {
 		return nil, err
 	}
+
+	// Create audit log for loan disbursement
+	afterDataMap := map[string]interface{}{
+		"id":                 loan.ID.String(),
+		"cooperative_id":     loan.CooperativeID.String(),
+		"application_id":     loan.ApplicationID.String(),
+		"member_id":          loan.MemberID.String(),
+		"principal":          loan.Principal,
+		"flat_rate_monthly":  loan.FlatRateMonthly,
+		"tenor_months":       loan.TenorMonths,
+		"status":             loan.Status,
+		"disbursed_at":       loan.DisbursedAt.Format("2006-01-02"),
+	}
+	afterDataJSON, _ := json.Marshal(afterDataMap)
+
+	auditLog := &entity.LoanAuditLog{
+		CooperativeID: loan.CooperativeID,
+		LoanID:        loan.ID,
+		Action:        "disburse",
+		PerformedBy:   approvedByUUID,
+		BeforeData:    datatypes.JSON("{}"),
+		AfterData:     datatypes.JSON(afterDataJSON),
+		Note:          "Pencairan pinjaman disetujui",
+	}
+	_ = u.auditRepo.CreateLog(ctx, auditLog)
 
 	schedules := GenerateSchedule(loan.ID, loan.Principal, loan.FlatRateMonthly, loan.TenorMonths, loan.DisbursedAt)
 	if err := u.loanRepo.BulkCreateSchedule(ctx, schedules); err != nil {
