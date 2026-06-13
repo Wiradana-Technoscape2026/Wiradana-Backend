@@ -156,7 +156,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 
 	// ── Sync (offline-first) ─────────────────────────────────────────────────
 	syncRepo := repository.NewSyncRepository(db)
-	syncUC := usecase.NewSyncUsecase(syncRepo, memberUC, savingsUC, loanAppUC, installmentUC, loanConfigUC)
+	syncUC := usecase.NewSyncUsecase(syncRepo, memberUC, savingsUC, loanAppUC, installmentUC, loanConfigUC, inventoryUC)
 	syncCtrl := controller.NewSyncController(syncUC, validate)
 	syncGroup := api.Group("/sync")
 	syncGroup.Get("/pull", authM, syncCtrl.Pull)

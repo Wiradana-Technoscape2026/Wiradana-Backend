@@ -128,6 +128,7 @@ func newSyncUC(repo *mockSyncRepo) usecase.SyncUsecase {
 		&stubLoanAppUC{},
 		&stubInstallmentUC{},
 		&stubLoanConfigUC{},
+		nil, // inventoryUC — not needed for these tests
 	)
 }
 
