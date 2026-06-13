@@ -28,8 +28,15 @@ var defaultModules = []struct {
 	Name    string
 	Enabled bool
 }{
-	{Key: "simpan_pinjam", Name: "Simpan Pinjam", Enabled: true},
-	{Key: "inventory", Name: "Inventory", Enabled: false},
+	{Key: "simpan_pinjam", Name: "Simpan Pinjam", Enabled: false},
+	{Key: "inventory", Name: "Inventory Management", Enabled: false},
+	{Key: "upah_buruh", Name: "Upah Buruh & Harian Lepas", Enabled: false},
+	{Key: "cold_storage", Name: "Cold Storage & Perishable Goods", Enabled: false},
+	{Key: "ternak", Name: "Siklus Ternak & Pakan", Enabled: false},
+	{Key: "procurement", Name: "Smart Procurement", Enabled: false},
+	{Key: "pos", Name: "Toko / Ritel (POS)", Enabled: false},
+	{Key: "agri", Name: "Tani Sayur", Enabled: false},
+	{Key: "logistik", Name: "Distribusi & Armada", Enabled: false},
 }
 
 func (u *moduleUsecase) List(ctx context.Context, coopID string) ([]model.ModuleResponse, error) {
