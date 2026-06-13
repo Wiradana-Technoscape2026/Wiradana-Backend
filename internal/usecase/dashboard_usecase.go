@@ -9,6 +9,7 @@ import (
 
 type DashboardUsecase interface {
 	Get(ctx context.Context, cooperativeID string) (*model.DashboardResponse, error)
+	GetMemberDashboard(ctx context.Context, cooperativeID, memberID string) (*model.MemberDashboardResponse, error)
 }
 
 type dashboardUsecase struct {
@@ -63,5 +64,40 @@ func (u *dashboardUsecase) Get(ctx context.Context, cooperativeID string) (*mode
 		UpcomingInstallments:      upcoming,
 		PendingApplicationsCount:  pendingCount,
 		PendingApplications:       pending,
+	}, nil
+}
+
+func (u *dashboardUsecase) GetMemberDashboard(ctx context.Context, cooperativeID, memberID string) (*model.MemberDashboardResponse, error) {
+	stats, err := u.dashboardRepo.GetMemberStats(ctx, cooperativeID, memberID)
+	if err != nil {
+		return nil, err
+	}
+
+	upcoming, err := u.dashboardRepo.GetMemberUpcomingInstallments(ctx, cooperativeID, memberID)
+	if err != nil {
+		return nil, err
+	}
+	if upcoming == nil {
+		upcoming = []model.MemberUpcomingInstallment{}
+	}
+
+	total := stats.Pokok + stats.Wajib + stats.Sukarela
+
+	return &model.MemberDashboardResponse{
+		CooperativeID:   cooperativeID,
+		CooperativeName: stats.CooperativeName,
+		MemberID:        memberID,
+		MemberName:      stats.MemberName,
+		SavingsSummary: model.SavingsSummary{
+			Pokok:    stats.Pokok,
+			Wajib:    stats.Wajib,
+			Sukarela: stats.Sukarela,
+			Total:    total,
+		},
+		ActiveLoans:          stats.ActiveLoans,
+		OutstandingAmount:    stats.OutstandingAmount,
+		OverdueInstallments:  stats.OverdueInstallments,
+		UpcomingInstallments: upcoming,
+		EstimatedShu:         stats.EstimatedShu,
 	}, nil
 }
