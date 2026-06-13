@@ -152,7 +152,7 @@ func (u *syncUsecase) dispatchMutation(ctx context.Context, coopID, userID strin
 	case "reject_loan_application":
 		return u.dispatchRejectLoanApplication(ctx, coopID, mut.Payload)
 	case "create_payment":
-		return u.dispatchCreatePayment(ctx, mut.Payload)
+		return u.dispatchCreatePayment(ctx, userID, mut.Payload)
 	case "update_loan_config":
 		return u.dispatchUpdateLoanConfig(ctx, coopID, mut.Payload)
 	case "create_inventory_product":
@@ -246,7 +246,7 @@ func (u *syncUsecase) dispatchRejectLoanApplication(ctx context.Context, coopID 
 	return resp.ID, nil
 }
 
-func (u *syncUsecase) dispatchCreatePayment(ctx context.Context, payload map[string]interface{}) (string, error) {
+func (u *syncUsecase) dispatchCreatePayment(ctx context.Context, userID string, payload map[string]interface{}) (string, error) {
 	scheduleID, ok := strField(payload, "installment_id")
 	if !ok {
 		return "", errors.New("installment_id diperlukan")
@@ -255,7 +255,7 @@ func (u *syncUsecase) dispatchCreatePayment(ctx context.Context, payload map[str
 	if err := remarshal(payload, &req); err != nil {
 		return "", fmt.Errorf("invalid payload: %w", err)
 	}
-	resp, err := u.installmentUC.Pay(ctx, scheduleID, &req)
+	resp, err := u.installmentUC.Pay(ctx, scheduleID, &req, userID)
 	if err != nil {
 		return "", err
 	}

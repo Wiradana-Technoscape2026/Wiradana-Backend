@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,24 +12,26 @@ import (
 	"github.com/wiradana/backend/internal/model"
 	"github.com/wiradana/backend/internal/model/converter"
 	"github.com/wiradana/backend/internal/repository"
+	"gorm.io/datatypes"
 )
 
 var ErrInstallmentNotFound = errors.New("angsuran tidak ditemukan")
 
 type InstallmentUsecase interface {
-	Pay(ctx context.Context, scheduleID string, req *model.PayInstallmentRequest) (*model.PayInstallmentResponse, error)
+	Pay(ctx context.Context, scheduleID string, req *model.PayInstallmentRequest, userID string) (*model.PayInstallmentResponse, error)
 }
 
 type installmentUsecase struct {
-	instRepo repository.InstallmentRepository
-	loanRepo repository.LoanRepository
+	instRepo  repository.InstallmentRepository
+	loanRepo  repository.LoanRepository
+	auditRepo repository.LoanAuditRepository
 }
 
-func NewInstallmentUsecase(instRepo repository.InstallmentRepository, loanRepo repository.LoanRepository) InstallmentUsecase {
-	return &installmentUsecase{instRepo: instRepo, loanRepo: loanRepo}
+func NewInstallmentUsecase(instRepo repository.InstallmentRepository, loanRepo repository.LoanRepository, auditRepo repository.LoanAuditRepository) InstallmentUsecase {
+	return &installmentUsecase{instRepo: instRepo, loanRepo: loanRepo, auditRepo: auditRepo}
 }
 
-func (u *installmentUsecase) Pay(ctx context.Context, scheduleID string, req *model.PayInstallmentRequest) (*model.PayInstallmentResponse, error) {
+func (u *installmentUsecase) Pay(ctx context.Context, scheduleID string, req *model.PayInstallmentRequest, userID string) (*model.PayInstallmentResponse, error) {
 	inst, err := u.instRepo.FindByID(ctx, scheduleID)
 	if errors.Is(err, repository.ErrInstallmentNotFound) {
 		return nil, ErrInstallmentNotFound
@@ -35,6 +39,9 @@ func (u *installmentUsecase) Pay(ctx context.Context, scheduleID string, req *mo
 	if err != nil {
 		return nil, err
 	}
+
+	loanID := inst.LoanID.String()
+	loanBefore, _ := u.loanRepo.FindByID(ctx, "", loanID)
 
 	schedUUID, _ := uuid.Parse(scheduleID)
 	payment := &entity.Payment{
@@ -59,7 +66,7 @@ func (u *installmentUsecase) Pay(ctx context.Context, scheduleID string, req *mo
 		inst.Status = newStatus
 	}
 
-	loanID := inst.LoanID.String()
+
 	overdue, _ := u.instRepo.HasOverdueInstallments(ctx, loanID)
 	allPaid, _ := u.instRepo.AllInstallmentsPaid(ctx, loanID)
 
@@ -70,6 +77,40 @@ func (u *installmentUsecase) Pay(ctx context.Context, scheduleID string, req *mo
 		loanStatus = "menunggak"
 	}
 	_ = u.loanRepo.UpdateStatus(ctx, loanID, loanStatus)
+
+	loanAfter, _ := u.loanRepo.FindByID(ctx, "", loanID)
+
+	// Create audit log for payment
+	var beforeJSON, afterJSON []byte
+	var coopUUID uuid.UUID
+	if loanBefore != nil {
+		coopUUID = loanBefore.CooperativeID
+		bm := map[string]interface{}{
+			"status":      loanBefore.Status,
+			"outstanding": loanBefore.Outstanding,
+		}
+		beforeJSON, _ = json.Marshal(bm)
+	}
+	if loanAfter != nil {
+		coopUUID = loanAfter.CooperativeID
+		am := map[string]interface{}{
+			"status":      loanAfter.Status,
+			"outstanding": loanAfter.Outstanding,
+		}
+		afterJSON, _ = json.Marshal(am)
+	}
+
+	userUUID, _ := uuid.Parse(userID)
+	auditLog := &entity.LoanAuditLog{
+		CooperativeID: coopUUID,
+		LoanID:        inst.LoanID,
+		Action:        "pay",
+		PerformedBy:   userUUID,
+		BeforeData:    datatypes.JSON(beforeJSON),
+		AfterData:     datatypes.JSON(afterJSON),
+		Note:          fmt.Sprintf("Pembayaran angsuran periode %d sebesar Rp %d", inst.PeriodNo, payment.Amount),
+	}
+	_ = u.auditRepo.CreateLog(ctx, auditLog)
 
 	loanWithMeta, _ := u.loanRepo.FindByID(ctx, "", loanID)
 	loanInstResponses := make([]model.InstallmentResponse, 0)

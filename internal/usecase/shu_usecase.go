@@ -20,6 +20,7 @@ type ShuUsecase interface {
 	CreatePeriod(ctx context.Context, coopID string, req *model.CreateShuPeriodRequest) (*model.ShuPeriodResponse, error)
 	ListPeriods(ctx context.Context, coopID string) ([]model.ShuPeriodResponse, error)
 	Calculate(ctx context.Context, coopID, periodID string) (*model.CalculateShuResponse, error)
+	GetPeriodDetail(ctx context.Context, coopID, periodID string) (*model.ShuPeriodDetailResponse, error)
 	GetMemberDistributions(ctx context.Context, memberID string) ([]model.ShuDistributionDetail, error)
 }
 
@@ -152,6 +153,38 @@ func (u *shuUsecase) Calculate(ctx context.Context, coopID, periodID string) (*m
 	}
 
 	return &model.CalculateShuResponse{
+		Period:        converter.ToShuPeriodResponse(period),
+		Distributions: distResponses,
+	}, nil
+}
+
+func (u *shuUsecase) GetPeriodDetail(ctx context.Context, coopID, periodID string) (*model.ShuPeriodDetailResponse, error) {
+	period, err := u.shuRepo.FindPeriodByID(ctx, coopID, periodID)
+	if err != nil {
+		return nil, err
+	}
+
+	distResponses := make([]model.ShuDistributionDetail, 0)
+
+	if period.Status == "final" {
+		distWithNames, err := u.shuRepo.FindDistributionsByPeriod(ctx, periodID)
+		if err != nil {
+			return nil, err
+		}
+		for _, d := range distWithNames {
+			distResponses = append(distResponses, model.ShuDistributionDetail{
+				ID:          d.ID.String(),
+				ShuPeriodID: d.ShuPeriodID.String(),
+				MemberID:    d.MemberID.String(),
+				MemberName:  d.MemberName,
+				JasaModal:   d.JasaModal,
+				JasaUsaha:   d.JasaUsaha,
+				TotalShu:    d.TotalShu,
+			})
+		}
+	}
+
+	return &model.ShuPeriodDetailResponse{
 		Period:        converter.ToShuPeriodResponse(period),
 		Distributions: distResponses,
 	}, nil
