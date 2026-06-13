@@ -15,13 +15,15 @@ import (
 )
 
 var (
-	ErrInvalidCredentials = errors.New("invalid credentials")
-	ErrEmailAlreadyUsed   = errors.New("email sudah terdaftar")
+	ErrInvalidCredentials    = errors.New("invalid credentials")
+	ErrEmailAlreadyUsed      = errors.New("email sudah terdaftar")
+	ErrNotMemberOfCooperative = errors.New("user bukan anggota koperasi ini")
 )
 
 type LoginResult struct {
-	Token string
-	User  *entity.AppUser
+	Token       string
+	User        *entity.AppUser
+	Memberships []repository.MembershipInfo // non-empty = anggota punya >1 koperasi, perlu pilih
 }
 
 type jwtClaims struct {
@@ -34,6 +36,7 @@ type jwtClaims struct {
 
 type AuthUsecase interface {
 	Login(ctx context.Context, identifier, password string) (*LoginResult, error)
+	SelectCooperative(ctx context.Context, identifier, password, cooperativeID string) (*LoginResult, error)
 	RegisterPengurus(ctx context.Context, req *model.RegisterPengurusRequest) (*LoginResult, error)
 }
 
@@ -52,7 +55,53 @@ func NewAuthUsecase(userRepo repository.UserRepository, jwtSecret string, jwtExp
 }
 
 func (u *authUsecase) Login(ctx context.Context, identifier, password string) (*LoginResult, error) {
-	return u.loginWithContext(ctx, identifier, password)
+	user, err := u.findAndVerify(ctx, identifier, password)
+	if err != nil {
+		return nil, err
+	}
+
+	memberships, err := u.userRepo.FindMembershipsByUserID(ctx, user.ID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	// Anggota dengan lebih dari satu koperasi harus memilih koperasi terlebih dahulu.
+	if len(memberships) > 1 {
+		return &LoginResult{User: user, Memberships: memberships}, nil
+	}
+
+	// Single membership: gunakan data dari tabel membership jika ada.
+	if len(memberships) == 1 {
+		m := memberships[0]
+		coopID, _ := uuid.Parse(m.CooperativeID)
+		user.CooperativeID = coopID
+		if m.MemberID != "" {
+			mid, _ := uuid.Parse(m.MemberID)
+			user.MemberID = &mid
+		}
+	}
+
+	return u.buildLoginResult(user)
+}
+
+func (u *authUsecase) SelectCooperative(ctx context.Context, identifier, password, cooperativeID string) (*LoginResult, error) {
+	user, err := u.findAndVerify(ctx, identifier, password)
+	if err != nil {
+		return nil, err
+	}
+
+	membership, err := u.userRepo.FindMembership(ctx, user.ID.String(), cooperativeID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrNotMemberOfCooperative
+		}
+		return nil, err
+	}
+
+	user.CooperativeID = membership.CooperativeID
+	user.MemberID = membership.MemberID
+
+	return u.buildLoginResult(user)
 }
 
 func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterPengurusRequest) (*LoginResult, error) {
@@ -87,11 +136,17 @@ func (u *authUsecase) RegisterPengurus(ctx context.Context, req *model.RegisterP
 		return nil, err
 	}
 
+	membership := &entity.UserCooperativeMembership{
+		UserID:        user.ID,
+		CooperativeID: coopID,
+		MemberID:      nil,
+	}
+	_ = u.userRepo.CreateMembership(ctx, membership) // best-effort; user sudah terbuat
+
 	return u.buildLoginResult(user)
 }
 
-// loginWithContext mencari user berdasarkan identifier (email untuk pengurus, NIK untuk anggota).
-func (u *authUsecase) loginWithContext(ctx context.Context, identifier, password string) (*LoginResult, error) {
+func (u *authUsecase) findAndVerify(ctx context.Context, identifier, password string) (*entity.AppUser, error) {
 	user, err := u.userRepo.FindByEmail(ctx, identifier)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -104,7 +159,7 @@ func (u *authUsecase) loginWithContext(ctx context.Context, identifier, password
 		return nil, ErrInvalidCredentials
 	}
 
-	return u.buildLoginResult(user)
+	return user, nil
 }
 
 func (u *authUsecase) buildLoginResult(user *entity.AppUser) (*LoginResult, error) {

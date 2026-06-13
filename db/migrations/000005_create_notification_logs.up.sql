@@ -1,4 +1,4 @@
-CREATE TABLE notification_log (
+CREATE TABLE IF NOT EXISTS notification_log (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     cooperative_id  UUID NOT NULL REFERENCES cooperative(id),
     member_id       UUID NOT NULL REFERENCES member(id),
@@ -13,7 +13,15 @@ CREATE TABLE notification_log (
     created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_notif_coop_created ON notification_log (cooperative_id, created_at DESC);
+-- Untuk query riwayat notifikasi per koperasi
+CREATE INDEX IF NOT EXISTS idx_notif_coop_created
+ON notification_log (cooperative_id, created_at DESC);
 
-CREATE UNIQUE INDEX idx_notif_dedup ON notification_log (ref_id, event_type, (created_at::date))
-    WHERE ref_id IS NOT NULL;
+-- Untuk query notifikasi per member
+CREATE INDEX IF NOT EXISTS idx_notif_member_created
+ON notification_log (member_id, created_at DESC);
+
+-- Mencegah notifikasi duplikat untuk event yang sama
+CREATE UNIQUE INDEX IF NOT EXISTS idx_notif_dedup
+ON notification_log (ref_id, event_type)
+WHERE ref_id IS NOT NULL;

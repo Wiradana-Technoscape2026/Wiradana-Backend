@@ -101,6 +101,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 
 	// ── Public ────────────────────────────────────────────────────────────────
 	api.Post("/auth/login", authCtrl.Login)
+	api.Post("/auth/select-cooperative", authCtrl.SelectCooperative)
 	api.Post("/auth/register/pengurus", authCtrl.RegisterPengurus)
 
 	// ── Pengurus ──────────────────────────────────────────────────────────────
