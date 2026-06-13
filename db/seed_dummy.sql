@@ -211,7 +211,7 @@ VALUES
 -- ============================================================
 INSERT INTO shu_period (id, cooperative_id, year, total_shu, pct_jasa_modal, pct_jasa_usaha, status)
 VALUES
-  ('shu11111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111',
+  ('c1e11111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111',
    2025, 40000000, 20, 25, 'final');
 
 -- SHU Distributions (18 anggota Padiwangi)
@@ -219,24 +219,24 @@ VALUES
 -- shu_usaha_pool = 10000000, paid by members with loans
 INSERT INTO shu_distribution (id, shu_period_id, member_id, jasa_modal, jasa_usaha, total_shu)
 VALUES
-  ('shud0001-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 546000,  1989000, 2535000),
-  ('shud0002-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 341000,       0,  341000),
-  ('shud0003-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 205000,       0,  205000),
-  ('shud0004-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4', 957000,  1790000, 2747000),
-  ('shud0005-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', 820000,  3183000, 4003000),
-  ('shud0006-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a6a6a6a6-a6a6-a6a6-a6a6-a6a6a6a6a6a6', 683000,  2785000, 3468000),
-  ('shud0007-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a7a7a7a7-a7a7-a7a7-a7a7-a7a7a7a7a7a7', 615000,   248000,  863000),
-  ('shud0008-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a8a8a8a8-a8a8-a8a8-a8a8-a8a8a8a8a8a8', 546000,       0,  546000),
-  ('shud0009-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a9a9a9a9-a9a9-a9a9-a9a9-a9a9a9a9a9a9', 410000,       0,  410000),
-  ('shud0010-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'a0a0a0a0-a0a0-a0a0-a0a0-a0a0a0a0a0a0', 342000,       0,  342000),
-  ('shud0011-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1', 274000,       0,  274000),
-  ('shud0012-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2', 274000,       0,  274000),
-  ('shud0013-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3', 274000,       0,  274000),
-  ('shud0014-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4', 274000,       0,  274000),
-  ('shud0015-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5', 205000,       0,  205000),
-  ('shud0016-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6', 205000,       0,  205000),
-  ('shud0017-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7', 137000,       0,  137000),
-  ('shud0018-1111-1111-1111-111111111111', 'shu11111-1111-1111-1111-111111111111', 'b8b8b8b8-b8b8-b8b8-b8b8-b8b8b8b8b8b8', 137000,       0,  137000);
+  ('c1ed0001-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 546000,  1989000, 2535000),
+  ('c1ed0002-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 341000,       0,  341000),
+  ('c1ed0003-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'cccccccc-cccc-cccc-cccc-cccccccccccc', 205000,       0,  205000),
+  ('c1ed0004-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4', 957000,  1790000, 2747000),
+  ('c1ed0005-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', 820000,  3183000, 4003000),
+  ('c1ed0006-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a6a6a6a6-a6a6-a6a6-a6a6-a6a6a6a6a6a6', 683000,  2785000, 3468000),
+  ('c1ed0007-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a7a7a7a7-a7a7-a7a7-a7a7-a7a7a7a7a7a7', 615000,   248000,  863000),
+  ('c1ed0008-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a8a8a8a8-a8a8-a8a8-a8a8-a8a8a8a8a8a8', 546000,       0,  546000),
+  ('c1ed0009-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a9a9a9a9-a9a9-a9a9-a9a9-a9a9a9a9a9a9', 410000,       0,  410000),
+  ('c1ed0010-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'a0a0a0a0-a0a0-a0a0-a0a0-a0a0a0a0a0a0', 342000,       0,  342000),
+  ('c1ed0011-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1', 274000,       0,  274000),
+  ('c1ed0012-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2', 274000,       0,  274000),
+  ('c1ed0013-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3', 274000,       0,  274000),
+  ('c1ed0014-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4', 274000,       0,  274000),
+  ('c1ed0015-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5', 205000,       0,  205000),
+  ('c1ed0016-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6', 205000,       0,  205000),
+  ('c1ed0017-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7', 137000,       0,  137000),
+  ('c1ed0018-1111-1111-1111-111111111111', 'c1e11111-1111-1111-1111-111111111111', 'b8b8b8b8-b8b8-b8b8-b8b8-b8b8b8b8b8b8', 137000,       0,  137000);
 
 -- ============================================================
 -- LOAN APPLICATIONS (9 total: 4 existing + 5 new)
@@ -246,37 +246,37 @@ INSERT INTO loan_application (
 )
 VALUES
   -- Existing 3 Padiwangi
-  ('laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+  ('5c1d0550-c78a-0455-a6eb-8cec69b09b6f', '11111111-1111-1111-1111-111111111111',
    'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '99999999-9999-9999-9999-999999999991',
    5000000, 12, 'Modal tani', 'approved', NOW() - INTERVAL '5 months'),
-  ('laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab', '11111111-1111-1111-1111-111111111111',
+  ('2d7cfee6-516b-fb9a-2c8a-e01579b7caa9', '11111111-1111-1111-1111-111111111111',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '99999999-9999-9999-9999-999999999991',
    8000000, 6, 'Usaha warung', 'rejected', NOW() - INTERVAL '3 months'),
-  ('laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaac', '11111111-1111-1111-1111-111111111111',
+  ('11bf325b-3174-61b7-1bd6-abad2116764e', '11111111-1111-1111-1111-111111111111',
    'cccccccc-cccc-cccc-cccc-cccccccccccc', NULL,
    3000000, 6, 'Renovasi rumah', 'pending', NOW() - INTERVAL '1 months'),
   -- Asep - approved -> loan lunas
-  ('lapp0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+  ('5a990004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
    'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4', '99999999-9999-9999-9999-999999999991',
    3000000, 6, 'Pengembangan usaha tani', 'approved', NOW() - INTERVAL '8 months'),
   -- Sri - approved -> loan aktif
-  ('lapp0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+  ('5a990005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
    'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', '99999999-9999-9999-9999-999999999991',
    4000000, 12, 'Modal dagang', 'approved', NOW() - INTERVAL '9 months'),
   -- Hendra - approved -> loan aktif
-  ('lapp0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+  ('5a990006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
    'a6a6a6a6-a6a6-a6a6-a6a6-a6a6a6a6a6a6', '99999999-9999-9999-9999-999999999991',
    7000000, 12, 'Pembelian mesin', 'approved', NOW() - INTERVAL '5 months'),
   -- Eni - approved -> loan menunggak
-  ('lapp0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+  ('5a990007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
    'a7a7a7a7-a7a7-a7a7-a7a7-a7a7a7a7a7a7', '99999999-9999-9999-9999-999999999991',
    2500000, 6, 'Keperluan rumah tangga', 'approved', NOW() - INTERVAL '5 months'),
   -- Ahmad - pending
-  ('lapp0010-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+  ('5a990010-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
    'a0a0a0a0-a0a0-a0a0-a0a0-a0a0a0a0a0a0', NULL,
    4000000, 12, 'Modal usaha beras', 'pending', NOW() - INTERVAL '2 weeks'),
   -- Sawargi: Rina - approved -> loan menunggak
-  ('laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaad', '22222222-2222-2222-2222-222222222222',
+  ('8cdd2931-7c3d-1015-d6b4-ad312f0f2e01', '22222222-2222-2222-2222-222222222222',
    'dddddddd-dddd-dddd-dddd-dddddddddddd', '99999999-9999-9999-9999-999999999994',
    6000000, 12, 'Pupuk dan bibit', 'approved', NOW() - INTERVAL '4 months');
 
@@ -287,31 +287,31 @@ INSERT INTO credit_assessment (
   id, application_id, score, grade, recommendation, limit_suggested, features, reasons, source
 )
 VALUES
-  ('caaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 80, 'A', 'approve', 9000000,
+  ('09db28be-d974-a0f0-c6e2-b8ef605a7f0b', '5c1d0550-c78a-0455-a6eb-8cec69b09b6f', 80, 'A', 'approve', 9000000,
    '{"ketepatan_bayar":0.95,"rasio_simpanan_pinjaman":0.6,"lama_keanggotaan_hari":840,"konsistensi_simpanan":0.9,"rasio_beban_angsuran":0.3}'::jsonb,
    '["riwayat pembayaran sangat baik","simpanan memadai terhadap pinjaman"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('caaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab', 'laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab', 58, 'D', 'reject', 2000000,
+  ('50d2a167-2da7-7aa8-fb2b-092d7d831b4e', '2d7cfee6-516b-fb9a-2c8a-e01579b7caa9', 58, 'D', 'reject', 2000000,
    '{"ketepatan_bayar":0.4,"rasio_simpanan_pinjaman":0.2,"lama_keanggotaan_hari":360,"konsistensi_simpanan":0.5,"rasio_beban_angsuran":0.9}'::jsonb,
    '["riwayat pembayaran kurang","simpanan tidak memadai"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('caaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaac', 'laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaac', 68, 'C', 'review', 3500000,
+  ('b48a27cd-a9e5-c929-f026-4aba4853b650', '11bf325b-3174-61b7-1bd6-abad2116764e', 68, 'C', 'review', 3500000,
    '{"ketepatan_bayar":0.7,"rasio_simpanan_pinjaman":0.5,"lama_keanggotaan_hari":240,"konsistensi_simpanan":0.7,"rasio_beban_angsuran":0.6}'::jsonb,
    '["simpanan cukup","perlu review manual"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('capp0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'lapp0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 85, 'A', 'approve', 10000000,
+  ('ca990004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '5a990004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 85, 'A', 'approve', 10000000,
    '{"ketepatan_bayar":1.0,"rasio_simpanan_pinjaman":0.7,"lama_keanggotaan_hari":720,"konsistensi_simpanan":1.0,"rasio_beban_angsuran":0.2}'::jsonb,
    '["anggota senior","riwayat simpanan sangat konsisten","simpanan memadai"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('capp0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'lapp0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 78, 'B', 'approve', 8000000,
+  ('ca990005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '5a990005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 78, 'B', 'approve', 8000000,
    '{"ketepatan_bayar":0.9,"rasio_simpanan_pinjaman":0.65,"lama_keanggotaan_hari":600,"konsistensi_simpanan":0.85,"rasio_beban_angsuran":0.35}'::jsonb,
    '["riwayat baik","simpanan memadai"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('capp0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'lapp0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 76, 'B', 'approve', 12000000,
+  ('ca990006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '5a990006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 76, 'B', 'approve', 12000000,
    '{"ketepatan_bayar":0.88,"rasio_simpanan_pinjaman":0.58,"lama_keanggotaan_hari":480,"konsistensi_simpanan":0.88,"rasio_beban_angsuran":0.4}'::jsonb,
    '["riwayat pembayaran baik","konsistensi simpanan baik"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('capp0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'lapp0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 63, 'C', 'review', 3000000,
+  ('ca990007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '5a990007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 63, 'C', 'review', 3000000,
    '{"ketepatan_bayar":0.6,"rasio_simpanan_pinjaman":0.4,"lama_keanggotaan_hari":420,"konsistensi_simpanan":0.75,"rasio_beban_angsuran":0.65}'::jsonb,
    '["beban angsuran cukup tinggi","perlu review manual"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('capp0010-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'lapp0010-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 65, 'C', 'review', 3500000,
+  ('ca990010-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '5a990010-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 65, 'C', 'review', 3500000,
    '{"ketepatan_bayar":1.0,"rasio_simpanan_pinjaman":0.45,"lama_keanggotaan_hari":270,"konsistensi_simpanan":0.78,"rasio_beban_angsuran":0.55}'::jsonb,
    '["anggota baru","konsistensi simpanan baik"]'::jsonb, 'MOCK_ADINS_SCORING'),
-  ('caaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaad', 'laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaad', 75, 'B', 'approve', 7000000,
+  ('74b4afb9-4cc7-114c-39dc-3076b60564fc', '8cdd2931-7c3d-1015-d6b4-ad312f0f2e01', 75, 'B', 'approve', 7000000,
    '{"ketepatan_bayar":0.85,"rasio_simpanan_pinjaman":0.6,"lama_keanggotaan_hari":300,"konsistensi_simpanan":0.8,"rasio_beban_angsuran":0.4}'::jsonb,
    '["simpanan cukup","riwayat baik"]'::jsonb, 'MOCK_ADINS_SCORING');
 
@@ -323,28 +323,28 @@ INSERT INTO loan (
 )
 VALUES
   -- Budi: aktif (5 bln berjalan, 4 sudah bayar)
-  ('lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
-   'laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+  ('047f4cb4-1ada-8649-ebc2-c8442acbd21b', '11111111-1111-1111-1111-111111111111',
+   '5c1d0550-c78a-0455-a6eb-8cec69b09b6f', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
    5000000, 1.50, 12, 'aktif', (NOW() - INTERVAL '5 months')::date),
   -- Asep: lunas (3jt/6mo, semua sudah bayar)
-  ('loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
-   'lapp0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4',
+  ('58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+   '5a990004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4',
    3000000, 1.50, 6, 'lunas', (NOW() - INTERVAL '7 months')::date),
   -- Sri: aktif (4jt/12mo, 8 sudah bayar)
-  ('loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
-   'lapp0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5',
+  ('58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+   '5a990005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5',
    4000000, 1.50, 12, 'aktif', (NOW() - INTERVAL '8 months')::date),
   -- Hendra: aktif (7jt/12mo, 4 sudah bayar)
-  ('loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
-   'lapp0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a6a6a6a6-a6a6-a6a6-a6a6-a6a6a6a6a6a6',
+  ('58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+   '5a990006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a6a6a6a6-a6a6-a6a6-a6a6-a6a6a6a6a6a6',
    7000000, 1.50, 12, 'aktif', (NOW() - INTERVAL '4 months')::date),
   -- Eni: menunggak (2.5jt/6mo, 1 bayar, 2 terlambat)
-  ('loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
-   'lapp0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a7a7a7a7-a7a7-a7a7-a7a7-a7a7a7a7a7a7',
+  ('58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111',
+   '5a990007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a7a7a7a7-a7a7-a7a7-a7a7-a7a7a7a7a7a7',
    2500000, 1.50, 6, 'menunggak', (NOW() - INTERVAL '4 months')::date),
   -- Rina (Sawargi): menunggak
-  ('lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', '22222222-2222-2222-2222-222222222222',
-   'laaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaad', 'dddddddd-dddd-dddd-dddd-dddddddddddd',
+  ('089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', '22222222-2222-2222-2222-222222222222',
+   '8cdd2931-7c3d-1015-d6b4-ad312f0f2e01', 'dddddddd-dddd-dddd-dddd-dddddddddddd',
    6000000, 1.75, 12, 'menunggak', (NOW() - INTERVAL '4 months')::date);
 
 -- ============================================================
@@ -354,86 +354,86 @@ VALUES
 -- Budi: 5jt, 1.5%, 12 bulan → interest=75000, principal=416666 (last=416674)
 INSERT INTO installment_schedule (id, loan_id, period_no, due_date, principal_due, interest_due, total_due, status)
 VALUES
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa01', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1,  (NOW() - INTERVAL '4 months')::date, 416666, 75000, 491666, 'lunas'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa02', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2,  (NOW() - INTERVAL '3 months')::date, 416666, 75000, 491666, 'lunas'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa03', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3,  (NOW() - INTERVAL '2 months')::date, 416666, 75000, 491666, 'lunas'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa04', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4,  (NOW() - INTERVAL '1 months')::date, 416666, 75000, 491666, 'lunas'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa05', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5,  NOW()::date,                           416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa06', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6,  (NOW() + INTERVAL '1 months')::date,  416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa07', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 7,  (NOW() + INTERVAL '2 months')::date,  416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa08', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 8,  (NOW() + INTERVAL '3 months')::date,  416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa09', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 9,  (NOW() + INTERVAL '4 months')::date,  416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa10', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, (NOW() + INTERVAL '5 months')::date,  416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa11', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 11, (NOW() + INTERVAL '6 months')::date,  416666, 75000, 491666, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa12', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 12, (NOW() + INTERVAL '7 months')::date,  416674, 75000, 491674, 'belum_bayar');
+  ('d0f3f1e3-12e5-0f1d-9525-b1de8f7c5743', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 1,  (NOW() - INTERVAL '4 months')::date, 416666, 75000, 491666, 'lunas'),
+  ('bca159ab-17f2-09a9-c36e-1dcd17e496e1', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 2,  (NOW() - INTERVAL '3 months')::date, 416666, 75000, 491666, 'lunas'),
+  ('45e90b1a-0e17-8988-08ba-ec2afb899637', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 3,  (NOW() - INTERVAL '2 months')::date, 416666, 75000, 491666, 'lunas'),
+  ('8bdfe92b-9641-b96f-5c46-020b742812b2', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 4,  (NOW() - INTERVAL '1 months')::date, 416666, 75000, 491666, 'lunas'),
+  ('c071a459-3e25-5ad6-45b8-393213a4615c', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 5,  NOW()::date,                           416666, 75000, 491666, 'belum_bayar'),
+  ('4427af5f-4ba4-e700-7fc3-645a72bc71d4', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 6,  (NOW() + INTERVAL '1 months')::date,  416666, 75000, 491666, 'belum_bayar'),
+  ('eff5a4bd-2356-52e8-8285-2d9f8e52f68e', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 7,  (NOW() + INTERVAL '2 months')::date,  416666, 75000, 491666, 'belum_bayar'),
+  ('40893268-bd46-d408-227f-4db3937de5a2', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 8,  (NOW() + INTERVAL '3 months')::date,  416666, 75000, 491666, 'belum_bayar'),
+  ('811396ee-7d4d-c5a8-fdbe-4c8206221b03', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 9,  (NOW() + INTERVAL '4 months')::date,  416666, 75000, 491666, 'belum_bayar'),
+  ('8645c426-5e83-84fc-9545-34fea03e2b2a', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 10, (NOW() + INTERVAL '5 months')::date,  416666, 75000, 491666, 'belum_bayar'),
+  ('3803b44b-7c44-00ba-d328-7fb56a33c01e', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 11, (NOW() + INTERVAL '6 months')::date,  416666, 75000, 491666, 'belum_bayar'),
+  ('b3d7244f-c303-6e56-9c16-0d2cf137e0f5', '047f4cb4-1ada-8649-ebc2-c8442acbd21b', 12, (NOW() + INTERVAL '7 months')::date,  416674, 75000, 491674, 'belum_bayar');
 
 -- Asep: 3jt, 1.5%, 6 bulan → interest=45000, principal=500000 (semua lunas)
 INSERT INTO installment_schedule (id, loan_id, period_no, due_date, principal_due, interest_due, total_due, status)
 VALUES
-  ('inst0004-aaaa-aaaa-aaaa-000000000001', 'loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1, (NOW() - INTERVAL '6 months')::date, 500000, 45000, 545000, 'lunas'),
-  ('inst0004-aaaa-aaaa-aaaa-000000000002', 'loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2, (NOW() - INTERVAL '5 months')::date, 500000, 45000, 545000, 'lunas'),
-  ('inst0004-aaaa-aaaa-aaaa-000000000003', 'loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3, (NOW() - INTERVAL '4 months')::date, 500000, 45000, 545000, 'lunas'),
-  ('inst0004-aaaa-aaaa-aaaa-000000000004', 'loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4, (NOW() - INTERVAL '3 months')::date, 500000, 45000, 545000, 'lunas'),
-  ('inst0004-aaaa-aaaa-aaaa-000000000005', 'loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5, (NOW() - INTERVAL '2 months')::date, 500000, 45000, 545000, 'lunas'),
-  ('inst0004-aaaa-aaaa-aaaa-000000000006', 'loan0004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6, (NOW() - INTERVAL '1 months')::date, 500000, 45000, 545000, 'lunas');
+  ('27cd0004-aaaa-aaaa-aaaa-000000000001', '58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1, (NOW() - INTERVAL '6 months')::date, 500000, 45000, 545000, 'lunas'),
+  ('27cd0004-aaaa-aaaa-aaaa-000000000002', '58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2, (NOW() - INTERVAL '5 months')::date, 500000, 45000, 545000, 'lunas'),
+  ('27cd0004-aaaa-aaaa-aaaa-000000000003', '58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3, (NOW() - INTERVAL '4 months')::date, 500000, 45000, 545000, 'lunas'),
+  ('27cd0004-aaaa-aaaa-aaaa-000000000004', '58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4, (NOW() - INTERVAL '3 months')::date, 500000, 45000, 545000, 'lunas'),
+  ('27cd0004-aaaa-aaaa-aaaa-000000000005', '58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5, (NOW() - INTERVAL '2 months')::date, 500000, 45000, 545000, 'lunas'),
+  ('27cd0004-aaaa-aaaa-aaaa-000000000006', '58a70004-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6, (NOW() - INTERVAL '1 months')::date, 500000, 45000, 545000, 'lunas');
 
 -- Sri: 4jt, 1.5%, 12 bulan → interest=60000, principal=333333 (last=333337); 8 lunas, 4 belum
 INSERT INTO installment_schedule (id, loan_id, period_no, due_date, principal_due, interest_due, total_due, status)
 VALUES
-  ('inst0005-aaaa-aaaa-aaaa-000000000001', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1,  (NOW() - INTERVAL '7 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000002', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2,  (NOW() - INTERVAL '6 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000003', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3,  (NOW() - INTERVAL '5 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000004', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4,  (NOW() - INTERVAL '4 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000005', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5,  (NOW() - INTERVAL '3 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000006', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6,  (NOW() - INTERVAL '2 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000007', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 7,  (NOW() - INTERVAL '1 months')::date, 333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000008', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 8,  NOW()::date,                          333333, 60000, 393333, 'lunas'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000009', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 9,  (NOW() + INTERVAL '1 months')::date,  333333, 60000, 393333, 'belum_bayar'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000010', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, (NOW() + INTERVAL '2 months')::date,  333333, 60000, 393333, 'belum_bayar'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000011', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 11, (NOW() + INTERVAL '3 months')::date,  333333, 60000, 393333, 'belum_bayar'),
-  ('inst0005-aaaa-aaaa-aaaa-000000000012', 'loan0005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 12, (NOW() + INTERVAL '4 months')::date,  333337, 60000, 393337, 'belum_bayar');
+  ('27cd0005-aaaa-aaaa-aaaa-000000000001', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1,  (NOW() - INTERVAL '7 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000002', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2,  (NOW() - INTERVAL '6 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000003', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3,  (NOW() - INTERVAL '5 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000004', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4,  (NOW() - INTERVAL '4 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000005', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5,  (NOW() - INTERVAL '3 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000006', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6,  (NOW() - INTERVAL '2 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000007', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 7,  (NOW() - INTERVAL '1 months')::date, 333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000008', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 8,  NOW()::date,                          333333, 60000, 393333, 'lunas'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000009', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 9,  (NOW() + INTERVAL '1 months')::date,  333333, 60000, 393333, 'belum_bayar'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000010', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, (NOW() + INTERVAL '2 months')::date,  333333, 60000, 393333, 'belum_bayar'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000011', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 11, (NOW() + INTERVAL '3 months')::date,  333333, 60000, 393333, 'belum_bayar'),
+  ('27cd0005-aaaa-aaaa-aaaa-000000000012', '58a70005-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 12, (NOW() + INTERVAL '4 months')::date,  333337, 60000, 393337, 'belum_bayar');
 
 -- Hendra: 7jt, 1.5%, 12 bulan → interest=105000, principal=583333 (last=583337); 4 lunas, 8 belum
 INSERT INTO installment_schedule (id, loan_id, period_no, due_date, principal_due, interest_due, total_due, status)
 VALUES
-  ('inst0006-aaaa-aaaa-aaaa-000000000001', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1,  (NOW() - INTERVAL '3 months')::date, 583333, 105000, 688333, 'lunas'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000002', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2,  (NOW() - INTERVAL '2 months')::date, 583333, 105000, 688333, 'lunas'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000003', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3,  (NOW() - INTERVAL '1 months')::date, 583333, 105000, 688333, 'lunas'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000004', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4,  NOW()::date,                          583333, 105000, 688333, 'lunas'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000005', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5,  (NOW() + INTERVAL '1 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000006', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6,  (NOW() + INTERVAL '2 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000007', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 7,  (NOW() + INTERVAL '3 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000008', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 8,  (NOW() + INTERVAL '4 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000009', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 9,  (NOW() + INTERVAL '5 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000010', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, (NOW() + INTERVAL '6 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000011', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 11, (NOW() + INTERVAL '7 months')::date,  583333, 105000, 688333, 'belum_bayar'),
-  ('inst0006-aaaa-aaaa-aaaa-000000000012', 'loan0006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 12, (NOW() + INTERVAL '8 months')::date,  583337, 105000, 688337, 'belum_bayar');
+  ('27cd0006-aaaa-aaaa-aaaa-000000000001', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1,  (NOW() - INTERVAL '3 months')::date, 583333, 105000, 688333, 'lunas'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000002', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2,  (NOW() - INTERVAL '2 months')::date, 583333, 105000, 688333, 'lunas'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000003', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3,  (NOW() - INTERVAL '1 months')::date, 583333, 105000, 688333, 'lunas'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000004', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4,  NOW()::date,                          583333, 105000, 688333, 'lunas'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000005', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5,  (NOW() + INTERVAL '1 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000006', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6,  (NOW() + INTERVAL '2 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000007', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 7,  (NOW() + INTERVAL '3 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000008', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 8,  (NOW() + INTERVAL '4 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000009', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 9,  (NOW() + INTERVAL '5 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000010', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 10, (NOW() + INTERVAL '6 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000011', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 11, (NOW() + INTERVAL '7 months')::date,  583333, 105000, 688333, 'belum_bayar'),
+  ('27cd0006-aaaa-aaaa-aaaa-000000000012', '58a70006-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 12, (NOW() + INTERVAL '8 months')::date,  583337, 105000, 688337, 'belum_bayar');
 
 -- Eni: 2.5jt, 1.5%, 6 bulan → interest=37500, principal=416666 (last=416670); 1 lunas, 2 terlambat, 3 belum
 INSERT INTO installment_schedule (id, loan_id, period_no, due_date, principal_due, interest_due, total_due, status)
 VALUES
-  ('inst0007-aaaa-aaaa-aaaa-000000000001', 'loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1, (NOW() - INTERVAL '3 months')::date, 416666, 37500, 454166, 'lunas'),
-  ('inst0007-aaaa-aaaa-aaaa-000000000002', 'loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2, (NOW() - INTERVAL '2 months')::date, 416666, 37500, 454166, 'terlambat'),
-  ('inst0007-aaaa-aaaa-aaaa-000000000003', 'loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3, (NOW() - INTERVAL '1 months')::date, 416666, 37500, 454166, 'terlambat'),
-  ('inst0007-aaaa-aaaa-aaaa-000000000004', 'loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4, NOW()::date,                          416666, 37500, 454166, 'belum_bayar'),
-  ('inst0007-aaaa-aaaa-aaaa-000000000005', 'loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5, (NOW() + INTERVAL '1 months')::date,  416666, 37500, 454166, 'belum_bayar'),
-  ('inst0007-aaaa-aaaa-aaaa-000000000006', 'loan0007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6, (NOW() + INTERVAL '2 months')::date,  416670, 37500, 454170, 'belum_bayar');
+  ('27cd0007-aaaa-aaaa-aaaa-000000000001', '58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 1, (NOW() - INTERVAL '3 months')::date, 416666, 37500, 454166, 'lunas'),
+  ('27cd0007-aaaa-aaaa-aaaa-000000000002', '58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 2, (NOW() - INTERVAL '2 months')::date, 416666, 37500, 454166, 'terlambat'),
+  ('27cd0007-aaaa-aaaa-aaaa-000000000003', '58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 3, (NOW() - INTERVAL '1 months')::date, 416666, 37500, 454166, 'terlambat'),
+  ('27cd0007-aaaa-aaaa-aaaa-000000000004', '58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 4, NOW()::date,                          416666, 37500, 454166, 'belum_bayar'),
+  ('27cd0007-aaaa-aaaa-aaaa-000000000005', '58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 5, (NOW() + INTERVAL '1 months')::date,  416666, 37500, 454166, 'belum_bayar'),
+  ('27cd0007-aaaa-aaaa-aaaa-000000000006', '58a70007-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 6, (NOW() + INTERVAL '2 months')::date,  416670, 37500, 454170, 'belum_bayar');
 
 -- Rina (Sawargi): 6jt, 1.75%, 12 bulan → interest=105000, principal=500000; 1 lunas, 2 terlambat, 9 belum
 INSERT INTO installment_schedule (id, loan_id, period_no, due_date, principal_due, interest_due, total_due, status)
 VALUES
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa13', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 1,  (NOW() - INTERVAL '3 months')::date, 500000, 105000, 605000, 'lunas'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa14', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 2,  (NOW() - INTERVAL '2 months')::date, 500000, 105000, 605000, 'terlambat'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa15', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 3,  (NOW() - INTERVAL '1 months')::date, 500000, 105000, 605000, 'terlambat'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa16', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 4,  NOW()::date,                          500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa17', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 5,  (NOW() + INTERVAL '1 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa18', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 6,  (NOW() + INTERVAL '2 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa19', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 7,  (NOW() + INTERVAL '3 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa20', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 8,  (NOW() + INTERVAL '4 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa21', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 9,  (NOW() + INTERVAL '5 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa22', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 10, (NOW() + INTERVAL '6 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa23', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 11, (NOW() + INTERVAL '7 months')::date,  500000, 105000, 605000, 'belum_bayar'),
-  ('in11111-aaaa-aaaa-aaaa-aaaaaaaaaa24', 'lnnnnnn-aaaa-aaaa-aaaa-aaaaaaaaaaab', 12, (NOW() + INTERVAL '8 months')::date,  500000, 105000, 605000, 'belum_bayar');
+  ('4c88dd82-2bb6-9224-57a3-7b659380f870', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 1,  (NOW() - INTERVAL '3 months')::date, 500000, 105000, 605000, 'lunas'),
+  ('50439db2-5278-184c-5729-11c097e3c382', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 2,  (NOW() - INTERVAL '2 months')::date, 500000, 105000, 605000, 'terlambat'),
+  ('180d8c0c-e962-e583-130d-8c032b69d8c9', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 3,  (NOW() - INTERVAL '1 months')::date, 500000, 105000, 605000, 'terlambat'),
+  ('5a2f9d64-15cb-5f28-421c-f6ddfea4ebb7', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 4,  NOW()::date,                          500000, 105000, 605000, 'belum_bayar'),
+  ('a3b4d547-c172-4ed8-f3f7-bad9ec9d227b', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 5,  (NOW() + INTERVAL '1 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('3bda9731-cd7f-792c-b7d3-351441e80904', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 6,  (NOW() + INTERVAL '2 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('5ed085cf-f181-f779-97c4-1eab80910349', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 7,  (NOW() + INTERVAL '3 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('9d890b4a-7869-8e3b-3e5f-6f0aef9a49a1', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 8,  (NOW() + INTERVAL '4 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('a48d077f-49be-24b1-2d5f-10f0005178f4', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 9,  (NOW() + INTERVAL '5 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('17159066-8e83-6f22-82b3-95f43a9e3f49', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 10, (NOW() + INTERVAL '6 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('59ea60ab-f628-e0c6-f545-5fe555ddfce7', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 11, (NOW() + INTERVAL '7 months')::date,  500000, 105000, 605000, 'belum_bayar'),
+  ('1a980ba5-d69b-eeb4-7652-cb4f91c038a4', '089bbc29-ccf1-ce2e-4f14-e2e9296e5d7e', 12, (NOW() + INTERVAL '8 months')::date,  500000, 105000, 605000, 'belum_bayar');
 
 -- ============================================================
 -- PAYMENTS (INSERT-ONLY)
@@ -441,34 +441,34 @@ VALUES
 INSERT INTO payment (id, schedule_id, amount, penalty, paid_at)
 VALUES
   -- Budi: 4 payments (period 1-4)
-  ('pppppp-aaaa-aaaa-aaaa-aaaaaaaaaa01', 'in11111-aaaa-aaaa-aaaa-aaaaaaaaaa01', 491666, 0, NOW() - INTERVAL '4 months'),
-  ('pppppp-aaaa-aaaa-aaaa-aaaaaaaaaa02', 'in11111-aaaa-aaaa-aaaa-aaaaaaaaaa02', 491666, 0, NOW() - INTERVAL '3 months'),
-  ('pppppp-aaaa-aaaa-aaaa-aaaaaaaaaa03', 'in11111-aaaa-aaaa-aaaa-aaaaaaaaaa03', 491666, 0, NOW() - INTERVAL '2 months'),
-  ('pppppp-aaaa-aaaa-aaaa-aaaaaaaaaa04', 'in11111-aaaa-aaaa-aaaa-aaaaaaaaaa04', 491666, 0, NOW() - INTERVAL '1 months'),
+  ('e9d10083-47f2-0385-89ef-4ba344b5c5cb', 'd0f3f1e3-12e5-0f1d-9525-b1de8f7c5743', 491666, 0, NOW() - INTERVAL '4 months'),
+  ('2d530563-872e-b9a0-6faa-67408c580741', 'bca159ab-17f2-09a9-c36e-1dcd17e496e1', 491666, 0, NOW() - INTERVAL '3 months'),
+  ('c5061017-9312-546f-1ff5-07ef21f751b1', '45e90b1a-0e17-8988-08ba-ec2afb899637', 491666, 0, NOW() - INTERVAL '2 months'),
+  ('8dbef9bd-1e28-0812-91bc-67d696996855', '8bdfe92b-9641-b96f-5c46-020b742812b2', 491666, 0, NOW() - INTERVAL '1 months'),
   -- Asep: 6 payments (all periods lunas)
-  ('pay0004-aaaa-aaaa-aaaa-000000000001', 'inst0004-aaaa-aaaa-aaaa-000000000001', 545000, 0, NOW() - INTERVAL '6 months'),
-  ('pay0004-aaaa-aaaa-aaaa-000000000002', 'inst0004-aaaa-aaaa-aaaa-000000000002', 545000, 0, NOW() - INTERVAL '5 months'),
-  ('pay0004-aaaa-aaaa-aaaa-000000000003', 'inst0004-aaaa-aaaa-aaaa-000000000003', 545000, 0, NOW() - INTERVAL '4 months'),
-  ('pay0004-aaaa-aaaa-aaaa-000000000004', 'inst0004-aaaa-aaaa-aaaa-000000000004', 545000, 0, NOW() - INTERVAL '3 months'),
-  ('pay0004-aaaa-aaaa-aaaa-000000000005', 'inst0004-aaaa-aaaa-aaaa-000000000005', 545000, 0, NOW() - INTERVAL '2 months'),
-  ('pay0004-aaaa-aaaa-aaaa-000000000006', 'inst0004-aaaa-aaaa-aaaa-000000000006', 545000, 0, NOW() - INTERVAL '1 months'),
+  ('a7717ac4-e385-513b-8705-383e7d747c64', '27cd0004-aaaa-aaaa-aaaa-000000000001', 545000, 0, NOW() - INTERVAL '6 months'),
+  ('88533c21-37ab-9571-ec8c-61fb73ab9ee0', '27cd0004-aaaa-aaaa-aaaa-000000000002', 545000, 0, NOW() - INTERVAL '5 months'),
+  ('507fe94c-c534-e74e-d4f0-f6ec4d71cc05', '27cd0004-aaaa-aaaa-aaaa-000000000003', 545000, 0, NOW() - INTERVAL '4 months'),
+  ('159762dd-72e1-6324-9196-3caa5c64dc0c', '27cd0004-aaaa-aaaa-aaaa-000000000004', 545000, 0, NOW() - INTERVAL '3 months'),
+  ('0b8eac04-5391-09e2-c5a9-686384ba40ff', '27cd0004-aaaa-aaaa-aaaa-000000000005', 545000, 0, NOW() - INTERVAL '2 months'),
+  ('70dc6ddb-b095-47d7-0739-fafccc520abf', '27cd0004-aaaa-aaaa-aaaa-000000000006', 545000, 0, NOW() - INTERVAL '1 months'),
   -- Sri: 8 payments (periods 1-8)
-  ('pay0005-aaaa-aaaa-aaaa-000000000001', 'inst0005-aaaa-aaaa-aaaa-000000000001', 393333, 0, NOW() - INTERVAL '7 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000002', 'inst0005-aaaa-aaaa-aaaa-000000000002', 393333, 0, NOW() - INTERVAL '6 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000003', 'inst0005-aaaa-aaaa-aaaa-000000000003', 393333, 0, NOW() - INTERVAL '5 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000004', 'inst0005-aaaa-aaaa-aaaa-000000000004', 393333, 0, NOW() - INTERVAL '4 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000005', 'inst0005-aaaa-aaaa-aaaa-000000000005', 393333, 0, NOW() - INTERVAL '3 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000006', 'inst0005-aaaa-aaaa-aaaa-000000000006', 393333, 0, NOW() - INTERVAL '2 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000007', 'inst0005-aaaa-aaaa-aaaa-000000000007', 393333, 0, NOW() - INTERVAL '1 months'),
-  ('pay0005-aaaa-aaaa-aaaa-000000000008', 'inst0005-aaaa-aaaa-aaaa-000000000008', 393333, 0, NOW()),
+  ('768eb70d-3d91-ffce-cc6a-5edd797714e4', '27cd0005-aaaa-aaaa-aaaa-000000000001', 393333, 0, NOW() - INTERVAL '7 months'),
+  ('8d132647-04a4-cb18-65b0-996aef83e559', '27cd0005-aaaa-aaaa-aaaa-000000000002', 393333, 0, NOW() - INTERVAL '6 months'),
+  ('376da7a1-ea27-78a2-b073-d203c8b9331f', '27cd0005-aaaa-aaaa-aaaa-000000000003', 393333, 0, NOW() - INTERVAL '5 months'),
+  ('1fab9d33-73d4-2d43-0aa8-a6afc1947122', '27cd0005-aaaa-aaaa-aaaa-000000000004', 393333, 0, NOW() - INTERVAL '4 months'),
+  ('c5e9a6a5-bcba-26a5-c37c-62ff2904aeef', '27cd0005-aaaa-aaaa-aaaa-000000000005', 393333, 0, NOW() - INTERVAL '3 months'),
+  ('29815607-9fd2-f181-3955-c4273cc94e09', '27cd0005-aaaa-aaaa-aaaa-000000000006', 393333, 0, NOW() - INTERVAL '2 months'),
+  ('2173915f-9070-926c-7d2e-49602db8f685', '27cd0005-aaaa-aaaa-aaaa-000000000007', 393333, 0, NOW() - INTERVAL '1 months'),
+  ('c9ed7901-0e2f-f4c0-f8e8-f5bd11c1b11b', '27cd0005-aaaa-aaaa-aaaa-000000000008', 393333, 0, NOW()),
   -- Hendra: 4 payments (periods 1-4)
-  ('pay0006-aaaa-aaaa-aaaa-000000000001', 'inst0006-aaaa-aaaa-aaaa-000000000001', 688333, 0, NOW() - INTERVAL '3 months'),
-  ('pay0006-aaaa-aaaa-aaaa-000000000002', 'inst0006-aaaa-aaaa-aaaa-000000000002', 688333, 0, NOW() - INTERVAL '2 months'),
-  ('pay0006-aaaa-aaaa-aaaa-000000000003', 'inst0006-aaaa-aaaa-aaaa-000000000003', 688333, 0, NOW() - INTERVAL '1 months'),
-  ('pay0006-aaaa-aaaa-aaaa-000000000004', 'inst0006-aaaa-aaaa-aaaa-000000000004', 688333, 0, NOW()),
+  ('3b1df4df-3ec5-f93d-6fc2-0e8737da7dff', '27cd0006-aaaa-aaaa-aaaa-000000000001', 688333, 0, NOW() - INTERVAL '3 months'),
+  ('e7ba3edb-a27c-26ad-056c-f4950f337509', '27cd0006-aaaa-aaaa-aaaa-000000000002', 688333, 0, NOW() - INTERVAL '2 months'),
+  ('b4ec72e1-5507-cd8a-50b6-cb3d6736dcb5', '27cd0006-aaaa-aaaa-aaaa-000000000003', 688333, 0, NOW() - INTERVAL '1 months'),
+  ('5d0f3eba-c755-6ee0-eb03-70d80c440b64', '27cd0006-aaaa-aaaa-aaaa-000000000004', 688333, 0, NOW()),
   -- Eni: 1 payment (period 1), periods 2-3 terlambat tidak dibayar
-  ('pay0007-aaaa-aaaa-aaaa-000000000001', 'inst0007-aaaa-aaaa-aaaa-000000000001', 454166, 0, NOW() - INTERVAL '3 months'),
+  ('081428fe-885f-a1d3-70ce-3fc565ba397b', '27cd0007-aaaa-aaaa-aaaa-000000000001', 454166, 0, NOW() - INTERVAL '3 months'),
   -- Rina (Sawargi): 1 payment (period 1)
-  ('pppppp-aaaa-aaaa-aaaa-aaaaaaaaaa05', 'in11111-aaaa-aaaa-aaaa-aaaaaaaaaa13', 605000, 0, NOW() - INTERVAL '3 months');
+  ('300651a9-f568-9135-a46d-ef4ea0db00b7', '4c88dd82-2bb6-9224-57a3-7b659380f870', 605000, 0, NOW() - INTERVAL '3 months');
 
 COMMIT;
