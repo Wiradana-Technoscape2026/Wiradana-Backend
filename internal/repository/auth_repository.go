@@ -86,5 +86,7 @@ func (r *userRepository) FindMembership(ctx context.Context, userID, cooperative
 }
 
 func (r *userRepository) CreateMembership(ctx context.Context, m *entity.UserCooperativeMembership) error {
-	return r.db.WithContext(ctx).Create(m).Error
+	return r.db.WithContext(ctx).
+		Where(entity.UserCooperativeMembership{UserID: m.UserID, CooperativeID: m.CooperativeID}).
+		FirstOrCreate(m).Error
 }
