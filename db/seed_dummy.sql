@@ -3,7 +3,8 @@ BEGIN;
 INSERT INTO cooperative (id, name, type, created_at)
 VALUES
   ('11111111-1111-1111-1111-111111111111', 'Koperasi Padiwangi', 'simpan_pinjam', NOW()),
-  ('22222222-2222-2222-2222-222222222222', 'Koperasi Sawargi', 'simpan_pinjam', NOW());
+  ('22222222-2222-2222-2222-222222222222', 'Koperasi Melati Jaya', 'simpan_pinjam', NOW()),
+  ('33333333-3333-3333-3333-333333333333', 'Koperasi Harapan Baru', 'simpan_pinjam', NOW());
 
 INSERT INTO member (
   id, cooperative_id, nik, full_name, address, phone_number, birth_date, status, custom_attributes, joined_at
@@ -63,25 +64,35 @@ VALUES
   ('99999999-9999-9999-9999-999999999993', '11111111-1111-1111-1111-111111111111',
    'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'siti@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
   ('99999999-9999-9999-9999-999999999994', '22222222-2222-2222-2222-222222222222',
-   NULL, 'pengurus@sawargi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus'),
+   NULL, 'pengurus@melatijaya.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus'),
   ('99999999-9999-9999-9999-999999999995', '22222222-2222-2222-2222-222222222222',
-   'dddddddd-dddd-dddd-dddd-dddddddddddd', 'rina@sawargi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
+   'dddddddd-dddd-dddd-dddd-dddddddddddd', 'rina@melatijaya.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
   ('99999999-9999-9999-9999-999999999996', '11111111-1111-1111-1111-111111111111',
    'a4a4a4a4-a4a4-a4a4-a4a4-a4a4a4a4a4a4', 'asep@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
   ('99999999-9999-9999-9999-999999999997', '11111111-1111-1111-1111-111111111111',
-   'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', 'sri@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota');
+   'a5a5a5a5-a5a5-a5a5-a5a5-a5a5a5a5a5a5', 'sri@padiwangi.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'anggota'),
+  ('99999999-9999-9999-9999-999999999998', '33333333-3333-3333-3333-333333333333',
+   NULL, 'pengurus@harapanbaru.id', '$2a$10$hlbA.jBgJtM6p0n8rnipKOiYIRrm37By7yPApkMBR/fUzlBJ5PMc6', 'pengurus');
 
 INSERT INTO loan_config (id, cooperative_id, flat_rate_monthly, max_plafond, penalty_daily)
 VALUES
   ('88888888-8888-8888-8888-888888888881', '11111111-1111-1111-1111-111111111111', 1.50, 20000000, 5000),
-  ('88888888-8888-8888-8888-888888888882', '22222222-2222-2222-2222-222222222222', 1.75, 15000000, 5000);
+  ('88888888-8888-8888-8888-888888888882', '22222222-2222-2222-2222-222222222222', 1.75, 15000000, 5000),
+  ('88888888-8888-8888-8888-888888888883', '33333333-3333-3333-3333-333333333333', 1.60, 25000000, 5000);
 
 INSERT INTO coop_module (id, cooperative_id, module_key, enabled)
 VALUES
   ('77777777-7777-7777-7777-777777777771', '11111111-1111-1111-1111-111111111111', 'simpan_pinjam', TRUE),
-  ('77777777-7777-7777-7777-777777777772', '11111111-1111-1111-1111-111111111111', 'inventory', FALSE),
-  ('77777777-7777-7777-7777-777777777773', '22222222-2222-2222-2222-222222222222', 'simpan_pinjam', TRUE),
-  ('77777777-7777-7777-7777-777777777774', '22222222-2222-2222-2222-222222222222', 'inventory', FALSE);
+  ('77777777-7777-7777-7777-777777777772', '11111111-1111-1111-1111-111111111111', 'upah_buruh', FALSE),
+  ('77777777-7777-7777-7777-777777777773', '11111111-1111-1111-1111-111111111111', 'inventory', FALSE),
+
+  ('77777777-7777-7777-7777-777777777774', '22222222-2222-2222-2222-222222222222', 'simpan_pinjam', TRUE),
+  ('77777777-7777-7777-7777-777777777775', '22222222-2222-2222-2222-222222222222', 'cold_storage', FALSE),
+  ('77777777-7777-7777-7777-777777777776', '22222222-2222-2222-2222-222222222222', 'inventory', FALSE),
+
+  ('77777777-7777-7777-7777-777777777777', '33333333-3333-3333-3333-333333333333', 'simpan_pinjam', TRUE),
+  ('77777777-7777-7777-7777-777777777778', '33333333-3333-3333-3333-333333333333', 'ternak', FALSE),
+  ('77777777-7777-7777-7777-777777777779', '33333333-3333-3333-3333-333333333333', 'inventory', FALSE);
 
 -- ============================================================
 -- SAVINGS TRANSACTIONS (INSERT-ONLY)
