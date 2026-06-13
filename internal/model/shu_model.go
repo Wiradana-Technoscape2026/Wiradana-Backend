@@ -37,6 +37,11 @@ type ShuDistributionDetail struct {
 }
 
 type CalculateShuResponse struct {
-	Period        ShuPeriodResponse        `json:"period"`
-	Distributions []ShuDistributionDetail  `json:"distributions"`
+	Period        ShuPeriodResponse       `json:"period"`
+	Distributions []ShuDistributionDetail `json:"distributions"`
+}
+
+type ShuPeriodDetailResponse struct {
+	Period        ShuPeriodResponse       `json:"period"`
+	Distributions []ShuDistributionDetail `json:"distributions"`
 }

@@ -57,3 +57,14 @@ func (ctrl *ShuController) Calculate(c *fiber.Ctx) error {
 	}
 	return OK(c, resp)
 }
+
+func (ctrl *ShuController) GetByID(c *fiber.Ctx) error {
+	coopID := c.Locals("cooperative_id").(string)
+	periodID := c.Params("id")
+
+	resp, err := ctrl.shuUC.GetPeriodDetail(c.Context(), coopID, periodID)
+	if err != nil {
+		return Fail(c, fiber.StatusNotFound, "NOT_FOUND", "periode SHU tidak ditemukan")
+	}
+	return OK(c, resp)
+}

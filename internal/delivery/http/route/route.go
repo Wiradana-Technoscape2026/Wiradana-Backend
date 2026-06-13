@@ -35,6 +35,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	moduleRepo := repository.NewModuleRepository(db)
 	inventoryRepo := repository.NewInventoryRepository(db)
 	notifRepo := repository.NewNotificationRepository(db)
+	reportRepo := repository.NewReportRepository(db)
 
 	// ── Gateways ──────────────────────────────────────────────────────────────
 	var ocrGateway adins.KTPOCRGateway
@@ -67,6 +68,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	moduleUC := usecase.NewModuleUsecase(moduleRepo)
 	inventoryUC := usecase.NewInventoryUsecase(inventoryRepo)
 	notifUC := usecase.NewNotificationUsecase(notifRepo, memberRepo, notifGateway)
+	reportUC := usecase.NewReportUsecase(reportRepo)
 
 	// ── Controllers ───────────────────────────────────────────────────────────
 	authCtrl := controller.NewAuthController(authUC, validate)
@@ -85,6 +87,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 	inventoryCtrl := controller.NewInventoryController(inventoryUC, validate)
 	portalCtrl := controller.NewPortalController(memberUC, savingsUC, shuUC)
 	notifCtrl := controller.NewNotificationController(notifUC)
+	reportCtrl := controller.NewReportController(reportUC)
 
 	// ── Middleware shorthands ─────────────────────────────────────────────────
 	// In Fiber v2, handlers passed to Group() are registered via app.Use(prefix),
@@ -132,10 +135,13 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 
 	pengurus.Get("/shu-periods", p(shuCtrl.List)...)
 	pengurus.Post("/shu-periods", p(shuCtrl.Create)...)
+	pengurus.Get("/shu-periods/:id", p(shuCtrl.GetByID)...)
 	pengurus.Post("/shu-periods/:id/calculate", p(shuCtrl.Calculate)...)
 
 	pengurus.Get("/modules", p(moduleCtrl.List)...)
 	pengurus.Put("/modules/:key", p(moduleCtrl.Update)...)
+
+	pengurus.Get("/reports/summary", p(reportCtrl.Summary)...)
 
 	pengurus.Get("/notifications/logs", p(notifCtrl.ListLogs)...)
 	pengurus.Post("/notifications/trigger", p(notifCtrl.Trigger)...)
