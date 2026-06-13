@@ -125,6 +125,7 @@ func RegisterRoutes(app *fiber.App, db *gorm.DB, cfg *config.Config, validate *v
 
 	pengurus.Get("/loans", p(loanCtrl.List)...)
 	pengurus.Get("/loans/:id", p(loanCtrl.GetByID)...)
+	pengurus.Get("/loans/:id/export", p(loanCtrl.ExportExcel)...)
 
 	pengurus.Post("/installments/:id/pay", p(installmentCtrl.Pay)...)
 
